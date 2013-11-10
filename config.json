@@ -1,9 +1,10 @@
 {
   "locals": {
-    "url": "http://localhost:8080/",
+    "url": "http://localhost:8080/Badness10k",
     "name": "BADNESS 10000",
     "owner": "Philip Nilsson",
-    "description": "Exploring the world of software and functional programming, one compile error at a time."
+    "description": "Exploring the world of software and functional programming, one compile error at a time.",
+    "baseUrl": "/Badness10k"
   },
   "baseUrl": "/Badness10k",
   "plugins": [
