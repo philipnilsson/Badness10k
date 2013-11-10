@@ -10,9 +10,9 @@
     <language>en</language>
     <item>
       <title>A functional solution to Twitter's waterflow problem</title>
-      <link>http://localhost:8080/badness10k/badness10k/articles/waterflow/</link>
+      <link>http://localhost:8080/badness10k/Badness10k/articles/waterflow/</link>
       <pubDate>Fri, 11 Oct 2013 02:00:00 +0200</pubDate>
-      <guid isPermaLink="true">http://localhost:8080/badness10k/badness10k/articles/waterflow/</guid>
+      <guid isPermaLink="true">http://localhost:8080/badness10k/Badness10k/articles/waterflow/</guid>
       <author></author>
       <description>&lt;p&gt;I recently came across an interesting problem at &lt;a href=&quot;http://qandwhat.apps.runkite.com/i-failed-a-twitter-interview/&quot;&gt;Michael Kozakov’s
 blog&lt;/a&gt;.&lt;/p&gt;
