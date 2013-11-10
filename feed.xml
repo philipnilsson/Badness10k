@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>BADNESS 10000</title>
+    <atom:link href="http://localhost:8080/feed.xml" rel="self" type="application/rss+xml"></atom:link>
+    <link>http://localhost:8080</link>
+    <description>Exploring the world of software and functional programming, one compile error at a time.</description>
+    <pubDate>Fri, 11 Oct 2013 02:00:00 +0200</pubDate>
+    <generator>Wintersmith - https://github.com/jnordberg/wintersmith</generator>
+    <language>en</language>
+    <item>
+      <title>A functional solution to Twitter's waterflow problem</title>
+      <link>http://localhost:8080/articles/waterflow/</link>
+      <pubDate>Fri, 11 Oct 2013 02:00:00 +0200</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/articles/waterflow/</guid>
+      <author></author>
+      <description>&lt;p&gt;I recently came across an interesting problem at &lt;a href=&quot;http://qandwhat.apps.runkite.com/i-failed-a-twitter-interview/&quot;&gt;Michael Kozakov’s
+blog&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;There are some interesting thoughts on the whole software interview
+process over there. I don’t have much to add on the subject. However,
+I thought the problem presented was quite interesting.&lt;/p&gt;
+&lt;p&gt;After some thought I managed to boil this down to a simple functional
+one-liner I though was interesting enough to share. First, let’s take
+a look at the problem definition.&lt;/p&gt;
+&lt;p&gt;Quoting the original source:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“Consider the following picture:”
+&lt;img src=&quot;http://qandwhat.apps.runkite.com/content/images/2013/Oct/twitter.jpg&quot; alt=&quot;Levels&quot; width=&quot;300&quot;/&gt;&lt;/p&gt;
+&lt;p&gt;“In this picture we have walls of different heights. This picture is
+represented by an array of integers, where the value at each index is
+the height of the wall. The picture above is represented with an array
+as [2,5,1,2,3,4,7,7,6].”&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://qandwhat.apps.runkite.com/content/images/2013/Oct/twitter_water.jpg&quot; alt=&quot;Filled&quot; width=&quot;300&quot;/&gt;&lt;/p&gt;
+&lt;p&gt;“Now imagine it rains. How much water is going to be accumulated in
+puddles between walls?”&lt;/p&gt;
+&lt;p&gt;“We count volume in square blocks of 1x1. So in the picture above,
+everything to the left of index 1 spills out. Water to the right of
+index 7 also spills out. We are left with a puddle between 1 and 6 and
+the volume is 10.”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;How would we go about finding a solution to this problem? I find this
+to be especially interesting, as there were many solutions posted to
+this problem &lt;a href=&quot;https://gist.github.com/mkozakov/59af0fd5bddbed1a0399&quot;&gt;over
+here&lt;/a&gt;, that
+were incorrect. My own immediate intuition led me to a solution that
+didn’t cover all cases as well.&lt;/p&gt;
+&lt;p&gt;How can we analyze this problem such that we can get a solution and
+implementation that we can be confident is correct?&lt;/p&gt;
+&lt;p&gt;The approach I suggest would be to start with the question: “Given a
+block in this graph, when will it be filled with water? We can assume
+there will be enough rain to fill any holes as far as is possible, so the
+only question is when the water will spill over to the side.&lt;/p&gt;
+&lt;p&gt;Then, the condition for the water to stay in a given square is that
+there is some wall to the &lt;strong&gt;left&lt;/strong&gt; that is higher than the height of the
+given square, as well as some wall to the &lt;strong&gt;right&lt;/strong&gt; that is higher that
+the height of the given square.&lt;/p&gt;
+&lt;p&gt;If we let \(h_i\) be the height of index \(i\), and let
+\(high_i^{left}\) denote the highest point to the left of index
+\(i\), and similarly define \(high_i^{right}\) we can express this
+as.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A sqaure of height \(h_i\), is filled when
+\[ h_i &amp;lt;= high_i^{left} \land h_i &amp;lt;= high_i^{right} \]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;We can simplify the conjunction by expressing this via \(min\)&lt;/p&gt;
+&lt;p&gt;\[ h_i &amp;lt;= min(high_i^{left}, high_i^{right}) \]&lt;/p&gt;
+&lt;p&gt;We can now easily see that the height of the water level of each
+index, which we’ll call \(level_i\) can be expressed by turning this
+inequality into an equality.&lt;/p&gt;
+&lt;p&gt;\[ level_i = min(high_i^{left}, high_i^{right}) \]&lt;/p&gt;
+&lt;p&gt;This leaves us in good shape for actually computing the answer. We
+start by calculating the values if \(high\). Starting with \(high_i^{left}\) we note that
+this can be expressed as a simple recursive equation in terms of \(h\) and itself.&lt;/p&gt;
+&lt;p&gt;\[ high_0^{left} = h_0 \]&lt;/p&gt;
+&lt;p&gt;\[ high_{i+1}^{left} = max(h_{i+1} , high_i^{left}) \] &lt;/p&gt;
+&lt;p&gt;This a recursive relation, where we apply an operator (\(max\)) to
+accumulate values in a list (\(h\)). We have a tool in the
+functional programming arsenal for computing exactly this, namely
+&lt;a href=&quot;http://hackage.haskell.org/package/base-4.6.0.1/docs/Prelude.html#v:scanl1&quot;&gt;&lt;em&gt;scanl1&lt;/em&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;For e.g. the input &lt;code&gt;h = [2,5,1,2,3,4,7,7,6]&lt;/code&gt; from the original post, we get&lt;/p&gt;
+&lt;pre&gt;scanl1 max h 
+&gt;&gt; [2,5,5,5,5,5,7,7,7]
+&lt;/pre&gt;
+
+&lt;p&gt;Similarly for \( high_{right} \) we have&lt;/p&gt;
+&lt;p&gt;\[ high_n^{right} = h_n \]&lt;/p&gt;
+&lt;p&gt;\[ high_{i-1}^{right} = max(h_{i} , high_i^{left}) \] &lt;/p&gt;
+&lt;p&gt;And we can use &lt;code&gt;scanr1&lt;/code&gt; to compute it&lt;/p&gt;
+&lt;pre&gt;scanr1 max h 
+&gt;&gt; [7,7,7,7,7,7,7,7,6]
+&lt;/pre&gt;
+
+&lt;p&gt;Now getting back to \(level\), which, as we recall, was defined as&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;\[ level_i = min(high_i^{left}, high_i^{right}) \]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;This is easy to compute, we only need to apply a function (\(min\))
+element-wise, which we can do via an application of &lt;code&gt;zipWith&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;zipWith min (scanl1 max h) (scanr1 max h)
+&gt;&gt; [2,5,5,5,5,5,7,7,6]
+&lt;/pre&gt;
+
+&lt;p&gt;Now we have defined the height of the water level at each index, all
+that is left is subtract the height of the “ground”, element-wise, to
+get the amount of water contributed at each index.&lt;/p&gt;
+&lt;pre&gt;let level h =
+  zipWith min (scanl1 max h) (scanr1 max h)
+
+zipWith (-) (level h) h
+&gt;&gt; [0,0,4,3,2,1,0,0,0]
+&lt;/pre&gt;
+
+&lt;p&gt;Now all that remains is taking the sum of the contributions at each
+index. This is, of course, as simple as applying the &lt;code&gt;sum&lt;/code&gt; function.&lt;/p&gt;
+&lt;p&gt;Our complete implementation is now&lt;/p&gt;
+&lt;pre&gt;water h = sum $ 
+  zipWith (-) 
+    (zipWith min (scanl1 max h) (scanr1 max h))
+    h
+
+water [2,5,1,2,3,4,7,7,6]
+&gt;&gt; 10
+&lt;/pre&gt;
+
+&lt;p&gt;We can now be confident that our implementation is correct. The
+breakdown of the problem corresponds nicely to our mathematical
+analysis, and our code is clean and declarative. The only price we
+have to pay is a linear use of extra space (arising from the use of
+&lt;code&gt;scanr1&lt;/code&gt;), which is cleverly avoided in &lt;a href=&quot;https://gist.github.com/mkozakov/59af0fd5bddbed1a0399&quot;&gt;Michael Kozakov’s imperative
+solution&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+  </channel>
+</rss>
