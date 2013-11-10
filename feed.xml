@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>BADNESS 10000</title>
-    <atom:link href="http://localhost:8080/feed.xml" rel="self" type="application/rss+xml"></atom:link>
-    <link>http://localhost:8080</link>
+    <atom:link href="http://localhost:8080/badness10k/feed.xml" rel="self" type="application/rss+xml"></atom:link>
+    <link>http://localhost:8080/badness10k</link>
     <description>Exploring the world of software and functional programming, one compile error at a time.</description>
     <pubDate>Fri, 11 Oct 2013 02:00:00 +0200</pubDate>
     <generator>Wintersmith - https://github.com/jnordberg/wintersmith</generator>
     <language>en</language>
     <item>
       <title>A functional solution to Twitter's waterflow problem</title>
-      <link>http://localhost:8080/articles/waterflow/</link>
+      <link>http://localhost:8080/badness10k/badness10k/articles/waterflow/</link>
       <pubDate>Fri, 11 Oct 2013 02:00:00 +0200</pubDate>
-      <guid isPermaLink="true">http://localhost:8080/articles/waterflow/</guid>
+      <guid isPermaLink="true">http://localhost:8080/badness10k/badness10k/articles/waterflow/</guid>
       <author></author>
       <description>&lt;p&gt;I recently came across an interesting problem at &lt;a href=&quot;http://qandwhat.apps.runkite.com/i-failed-a-twitter-interview/&quot;&gt;Michael Kozakov’s
 blog&lt;/a&gt;.&lt;/p&gt;
