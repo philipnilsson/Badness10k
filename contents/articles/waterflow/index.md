@@ -62,11 +62,11 @@ If we let \\(h_i\\) be the height of index \\(i\\), and let
 as.
 
 > A sqaure of height \\(h_i\\), is filled when
-> \\[ h_i <= high_i^{left} \land h_i <= high_i^{right} \\]
+> \\[ h_i \leq high_i^{left} \land h_i \leq high_i^{right} \\]
 
 We can simplify the conjunction by expressing this via \\(min\\)
 
-\\[ h_i <= min(high_i^{left}, high_i^{right}) \\]
+\\[ h_i \leq min(high_i^{left}, high_i^{right}) \\]
 
 We can now easily see that the height of the water level of each
 index, which we'll call \\(level_i\\) can be expressed by turning this

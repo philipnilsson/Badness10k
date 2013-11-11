@@ -70,10 +70,10 @@ the height of the given&nbsp;square.</p>
 \(i\), and similarly define \(high_i^{right}\) we can express this&nbsp;as.</p>
 <blockquote>
 <p>A sqaure of height \(h_i\), is filled when
-\[ h_i &lt;= high_i^{left} \land h_i &lt;= high_i^{right}&nbsp;\]</p>
+\[ h_i \leq high_i^{left} \land h_i \leq high_i^{right}&nbsp;\]</p>
 </blockquote>
 <p>We can simplify the conjunction by expressing this via&nbsp;\(min\)</p>
-<p>\[ h_i &lt;= min(high_i^{left}, high_i^{right})&nbsp;\]</p>
+<p>\[ h_i \leq min(high_i^{left}, high_i^{right})&nbsp;\]</p>
 <p>We can now easily see that the height of the water level of each
 index, which we’ll call \(level_i\) can be expressed by turning this
 inequality into an&nbsp;equality.</p>
