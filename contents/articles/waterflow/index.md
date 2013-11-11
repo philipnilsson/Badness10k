@@ -52,8 +52,8 @@ there will be enough rain to fill any holes as far as is possible, so the
 only question is when the water will spill over to the side.
 
 Then, the condition for the water to stay in a given square is that
-there is some wall to the **left** that is higher than the height of the
-given square, as well as some wall to the **right** that is higher that
+there is some wall to the **left** that is at least as high as the height of the
+given square, as well as some wall to the **right** that is as high as
 the height of the given square.
 
 If we let \\(h_i\\) be the height of index \\(i\\), and let
