@@ -75,7 +75,7 @@ inequality into an equality.
 \\[ level_i = min(high_i^{left}, high_i^{right}) \\]
 
 This leaves us in good shape for actually computing the answer. We
-start by calculating the values if \\(high\\). Starting with \\(high_i^{left}\\) we note that
+start by calculating the values of \\(high\\). Starting with \\(high_i^{left}\\) we note that
 this can be expressed as a simple recursive equation in terms of \\(h\\) and itself.
 
 \\[ high_0^{left} = h_0 \\]

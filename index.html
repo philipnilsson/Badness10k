@@ -83,7 +83,7 @@ index, which we’ll call \(level_i\) can be expressed by turning this
 inequality into an&nbsp;equality.</p>
 <p>\[ level_i = min(high_i^{left}, high_i^{right})&nbsp;\]</p>
 <p>This leaves us in good shape for actually computing the answer. We
-start by calculating the values if \(high\). Starting with \(high_i^{left}\) we note that
+start by calculating the values of \(high\). Starting with \(high_i^{left}\) we note that
 this can be expressed as a simple recursive equation in terms of \(h\) and&nbsp;itself.</p>
 <p>\[ high_0^{left} = h_0&nbsp;\]</p>
 <p>\[ high_{i+1}^{left} = max(h_{i+1} , high_i^{left})&nbsp;\] </p>
