@@ -35,13 +35,13 @@ server is notified as the user changes data in the fields. In the
 right hand column we’ll log “server” (a.k.a console.log) calls to our
 API. Edit the fields to see what calls are made.&lt;/p&gt;
 &lt;div id=&quot;ex&quot; style=&quot;overflow: hidden; padding: 0.5em 0 1em 0&quot;&gt;
- &lt;div style=&quot;width: 34%; float: left; border: 1px solid lightgray; padding: 2%; font-size: 70%;&quot;&gt;
+ &lt;div style=&quot;width: 39%; float: left; border: 1px solid lightgray; padding: 2%; font-size: 65%;&quot;&gt;
   &lt;div&gt; &lt;span style=&quot;width: 32%; display: inline-block;&quot;&gt;First name: &lt;/span&gt; &lt;input data-bind=&quot;value: firstName, valueUpdate: 'afterkeydown'&quot; /&gt; &lt;/div&gt;
   &lt;div&gt; &lt;span style=&quot;width: 32%; display: inline-block;&quot;&gt;Last name: &lt;/span&gt; &lt;input data-bind=&quot;value: lastName, valueUpdate: 'afterkeydown'&quot; /&gt; &lt;/div&gt;
   &lt;div&gt; &lt;span style=&quot;width: 32%; display: inline-block;&quot;&gt;Full name: &lt;/span&gt; &lt;input data-bind=&quot;value: fullName, valueUpdate: 'afterkeydown'&quot; /&gt; &lt;/div&gt;
   &lt;div&gt; &lt;span style=&quot;width: 32%; display: inline-block;&quot;&gt;SSN: &lt;/span&gt; &lt;input data-bind=&quot;value: ssn, valueUpdate: 'afterkeydown'&quot; /&gt; &lt;/div&gt;
  &lt;/div&gt;
- &lt;div id=&quot;ex_log&quot; style=&quot;width: 56%; height: 100%; float: right; border: 1px solid lightgray; padding: 2%; font-size: 70%;&quot;&gt;
+ &lt;div id=&quot;ex_log&quot; style=&quot;width: 51%; height: 100%; float: right; border: 1px solid lightgray; padding: 2%; font-size: 65%;&quot;&gt;
     &amp;gt; Change the fields to see how the “API” is called.
  &lt;/div&gt;
 &lt;/div&gt;
