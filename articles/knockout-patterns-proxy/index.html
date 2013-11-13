@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <title>Patterns for Knockout.js — Proxy Object - BADNESS 10000
+    </title>
+    <link rel="alternate" href="http://localhost:8080/Badness10k/feed.xml" type="application/rss+xml" title="Exploring the world of software and functional programming, one compile error at a time.">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic|Anonymous+Pro:400,700,400italic,700italic|Merriweather:400,700,300">
+    <link rel="stylesheet" href="/Badness10k/css/main.css">
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-45629233-1', 'philipnilsson.github.io');
+      ga('send', 'pageview');
+      
+    </script>
+  </head>
+  <body class="article-detail">
+    <div class="top">
+      <h1> <a href="/">BADNESS 10000</a></h1><a href="https://twitter.com/ali_pang"><img width="50" src="https://abs.twimg.com/a/1377795275/images/resources/twitter-bird-dark-bgs.png"></a>
+    </div>
+    <header class="header">
+      <div class="content-wrap">
+        <h1>Patterns for Knockout.js — Proxy Object</h1>
+        <p class="author">Written by <span class="author">Philip Nilsson</span>
+        </p>
+      </div>
+    </header>
+    <div id="content">
+      <div class="content-wrap">
+        <article class="article">
+          <section class="content"><script src="/Badness10k/jquery.js"></script>
+<script src="/Badness10k/knockout.js"></script>
+<script src="/Badness10k/knockout-mapping.js"></script>
+
+<p>Lately, I’ve been looking into patterns in Knockout that will allow
+separation between view- and backend-related code. I’ve been trying to
+find methods of transparently communicating to a server <span class="caps">API</span> when
+relevant view model properties change, without explicitly concerning
+the view&nbsp;code.</p>
+<p>I’m looking for “plain” knockout solutions, that doesn’t have to
+involve the logic of some additional routing library, so we’ll focus
+on using knockout’s main abstraction,&nbsp;observables.</p>
+<p>This post describes one of the solutions I’ve used for my current project,
+which I will name proxy objects, lacking a better name. We’ll look
+into how to set up observable objects that are automatically persisted
+by posting to an <span class="caps">API</span>, and thus decoupling it from the view&nbsp;model.</p>
+<p>We’re going to build something like the example below, where the
+server is notified as the user changes data in the fields. In the
+right hand column we’ll log “server” (a.k.a console.log) calls to our
+<span class="caps">API</span>. Edit the fields to see what calls are&nbsp;made.</p>
+<div id="ex" style="overflow: hidden; padding: 0.5em 0 1em 0">
+ <div style="width: 34%; float: left; border: 1px solid lightgray; padding: 2%; font-size: 70%;">
+  <div> <span style="width: 32%; display: inline-block;">First name: </span> <input data-bind="value: firstName, valueUpdate: 'afterkeydown'" /> </div>
+  <div> <span style="width: 32%; display: inline-block;">Last name: </span> <input data-bind="value: lastName, valueUpdate: 'afterkeydown'" /> </div>
+  <div> <span style="width: 32%; display: inline-block;">Full name: </span> <input data-bind="value: fullName, valueUpdate: 'afterkeydown'" /> </div>
+  <div> <span style="width: 32%; display: inline-block;"><span class="caps">SSN</span>: </span> <input data-bind="value: ssn, valueUpdate: 'afterkeydown'" /> </div>
+ </div>
+ <div id="ex_log" style="width: 56%; height: 100%; float: right; border: 1px solid lightgray; padding: 2%; font-size: 70%;">
+    &gt; Change the fields to see how the “<span class="caps">API</span>” is called.
+ </div>
+</div>
+
+<p>Note that we are ignoring the <span class="caps">SSN</span> field, as far as notifying the
+backend goes. In this example we’ll assume the social security number
+is a property that is not editable by the user, but I’ve included an
+editable view for it as an example of a property changing on the view
+model, without triggering a server&nbsp;call.</p>
+<p>We’re going to write a method <code>proxy</code> that’ll allow us to set up the
+code for this as&nbsp;follows.</p>
+<pre>
+var person = {
+  firstName: 'Steve',
+  lastName: 'Sanderson',
+  ssn: '1234',
+  ignore: ['ssn']
+};
+
+ko.applyBindings(
+  new ViewModel(
+    ko.proxy('api/person', person)));
+</pre>
+
+<h2 id="implementing-proxy-">Implementing <code>proxy</code></h2>
+<p>Lets say we’ll start by retreiving the initial state from the&nbsp;server.</p>
+<pre>
+$.get('api/person', function(init) {
+  ...
+})
+</pre>
+
+<p>From here we can set up an observable that we could bind to the view,
+using <code>ko.observable(init)</code>. However, we’d like to react to changes in
+any individual field (i.e. <code>firstName</code> or <code>lastName</code>). We can make all
+fields of a javascript object observable by using the 
+<a href="http://knockoutjs.com/documentation/plugins-mapping.html">knockout mapping plugin</a>.</p>
+<pre>
+$.get('api/person', function(init) {
+  var proxy = ko.mapping.fromJS(init);
+})
+</pre>
+
+<p>So how can we react to changes in any of the fields of this new
+object? The result from ko.mapping is a javascript object with
+observable fields, but it is not itself observable in its
+entirety. Fortunately this can easily be solved by creating a computed
+observable that uses the mapping-plugin’s reverse mapping
+functionality that takes a mapped object to a plain javascript&nbsp;object.</p>
+<pre>
+$.get('api/person', function(init) {
+  var proxy = ko.mapping.fromJS(init);
+  ko.computed(function() {
+    console.log(ko.mapping.toJS(proxy));
+  });
+})
+</pre>
+
+<p>Since the computed calls the reverse-mapping operation, it will
+evalutate each observable in the proxy object, and thus each field
+will be registered as a dependency, so we will now see logging to the
+console whenever any individual field of the proxy is&nbsp;changed.</p>
+<p>Now all we need to do is to replace the <code>console.log</code> logging with an
+<span class="caps">API</span> call that calls the api. The only new source of complexity is that
+we’d probably like to avoid to call our API directly after
+initializing the first value, as we’d just send the same value back
+anyway, so we keep track of that in variable <code>first</code>.</p>
+<pre>
+$.get('api/person', function(init) {
+  var proxy = ko.mapping.fromJS(init);
+  var first = true;
+  ko.computed(function() {
+    var data = ko.mapping.toJS(proxy);
+    if (!first) {
+      $.ajax({
+        type: 'post',
+        url: '/api/person',
+        data: { '': JSON.stringify(data) };
+    }
+    first = false;
+  });
+});
+</pre>
+
+<p>If we clean this up a bit, putting code into some library function,
+say <code>ko.proxy</code>, we can set up our view model&nbsp;as</p>
+<pre>
+$.get('api/person', function(init) {
+  var proxy = ko.proxy('api/person', init);
+  ko.applyBindings(new ViewModel(proxy));
+})
+</pre>
+
+<p>Note that we have a pretty good separation of concerns. The view model
+does not have to know about server endpoints, or anything about the
+<span class="caps">API</span> in order for changes to propagate to the server. It is however
+necessary for the view model code to excercise some restraint in
+updating the proxy object. For instance, if there is any validation to
+be performed by the client, it’d be necessary to bind to another value
+and perform validations on it before pushing changes to the&nbsp;proxy.</p>
+<p>In a future post I might give more examples on how we can easily
+include this type of validation when using the proxy&nbsp;pattern.</p>
+<h2 id="throttling">Throttling</h2>
+<p>We’d probably like to perform some sort of throttling before sending
+data to the server, so that we don’t perform an ajax call on
+e.g. every single keystroke for a text input. We can do this easily
+by applying knockout’s <code>throttle</code> extensions (which really is a
+debounce) on our computed&nbsp;observable.</p>
+<pre>
+ko.computed(function() {
+  var data = ko.mapping.toJS ( ... )
+  ...
+}).extend({ throttle: 1000 })
+</pre>
+
+<p>That’s all we need to limit the rate of calls to when the user has
+been inactive for one&nbsp;second.</p>
+<h2 id="ignoring-fields">Ignoring&nbsp;fields</h2>
+<p>It’s pretty common that the data available in a specific resource in
+the <span class="caps">API</span> will contain data that we are not interested in sending back
+to the server. Say our data contains another field for a social
+security number <code>ssn</code>. The ko.mapping plugin allows us to provide an
+array containing fields we’d like to ignore when doing the reverse
+mapping with <code>ko.mapping.toJS</code>. </p>
+<p>Our convention has been for the <span class="caps">API</span> itself to provide the list of
+fields it’s not interested in updating, so a response might look
+something&nbsp;like.</p>
+<pre>
+{ 
+  firstName: 'Ali',
+  lastName: 'Pang',
+  ssn: '1234',
+  ignore: ['ssn']
+}
+</pre>
+
+<p>We now modify the <code>ko.proxy</code> code to take this into&nbsp;account.</p>
+<pre>
+ko.proxy = function (init, endpoint) {
+
+    var ignoreAlways = ['ignore'];
+
+    var obs = ko.mapping.fromJS(init, { ignore: ignoreAlways });
+
+    var first = true;
+    ko.computed(function () {
+        var data = ko.mapping.toJS(obs, {
+            ignore: init.ignore
+        });
+        if (!first)
+            $.post({url: endpoint, data: { '': JSON.stringify(data) } });
+        first = false;
+    }).extend({
+        throttle: 1400
+    });
+    return obs;
+};
+</pre>
+
+<p>We set things up so that the initial mapping via <code>fromJS</code> ignore’s the
+<code>ignore</code> array, as this is not relevant for the view
+model. Additionally, we tell <code>toJS</code> to ignore the fields from
+<code>init.ignore</code>, which in this case would be <code>[&#39;ssn&#39;]</code>.</p>
+<p>This will have two&nbsp;benefits.</p>
+<ul>
+<li><p>We don’t send irrelevant data back to the server. In this example
+we’re not using the <code>ssn</code> to identify the user, it’s just an
+unchangeable piece of extra data. With this setup, the <code>POST</code> data
+will not include the <code>ssn</code> field on its way back to the server,
+saving&nbsp;traffic.</p>
+</li>
+<li><p>Since the computed observable does not look at the ignored fields
+when reverse mapping, any changes made by the view model to the
+<code>ssn</code> field will not trigger a server call, as it will not be
+registered as a&nbsp;dependency.</p>
+</li>
+</ul>
+<p>In other words, if the view model calls <code>proxy.ssn(&#39;4567&#39;)</code>, no call
+will be made to the server. If it calls <code>proxy.name(&#39;Philip&#39;)</code>, the
+resulting post will not include data for the social security&nbsp;number.</p>
+<h2 id="setting-up-the-view-model">Setting up the view&nbsp;model</h2>
+<p>To complete this example, we can apply standard patterns, such as this
+example, adding a full name property, from the knockout tutorial. It will
+continue to work as&nbsp;expected.</p>
+<pre>
+function ViewModel(proxy) {
+    this.firstName = proxy.firstName;
+    this.lastName = proxy.lastName;
+
+    this.fullName = ko.computed({
+        read: function () {
+            return this.firstName() + " " + this.lastName();
+        },
+        write: function (value) {
+            var lastSpacePos = value.lastIndexOf(" ");
+            if (lastSpacePos > 0) { 
+                this.firstName(
+                  value.substring(0, lastSpacePos));
+                this.lastName(
+                  value.substring(lastSpacePos + 1));
+            }
+        },
+        owner: this
+    });
+}
+
+ko.applyBindings(
+  new ViewModel(
+    ko.proxy('api/person', {
+      firstName: 'Steve',
+      lastName: 'Sanderson',
+      ssn: '1234',
+      ignore: ['ssn']
+    })));
+</pre>
+
+<script>
+
+ko.proxy = function (init, endpoint) {
+
+    var ignoreAlways = ['ignore'];
+
+    var obs = ko.mapping.fromJS(init, { ignore: ignoreAlways });
+
+    var first = true;
+    ko.computed(function () {
+        var data = ko.mapping.toJS(obs, {
+            ignore: init.ignore
+        });
+        data = JSON.stringify(data);
+        if (!first) {
+            $('#ex_log').prepend('<div>' + '&gt; Sending: ' + data + '</div>');
+            $('#ex_log div:gt(5)').remove()
+        }
+        first = false;
+    }).extend({
+        throttle: 1000
+    });
+    return obs;
+};
+
+function ViewModel(proxy) {
+    this.firstName = proxy.firstName;
+    this.lastName = proxy.lastName;
+    this.ssn = proxy.ssn;
+
+    this.fullName = ko.computed({
+        read: function () {
+            return this.firstName() + " " + this.lastName();
+        },
+        write: function (value) {
+            var lastSpacePos = value.lastIndexOf(" ");
+            if (lastSpacePos > 0) { 
+                this.firstName(
+                  value.substring(0, lastSpacePos));
+                this.lastName(
+                  value.substring(lastSpacePos + 1));
+            }
+        },
+        owner: this
+    });
+}
+
+ko.applyBindings(
+  new ViewModel(
+    ko.proxy({
+      firstName: 'Steve',
+      lastName: 'Sanderson',
+      ssn: '1234',
+      ignore: ['ssn']
+    })), document.getElementById('ex'));
+
+</script></section>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="content-wrap">
+        <div class="nav"><a href="/Badness10k/">« Full blog</a></div>
+        <section class="about">
+        </section>
+        <section class="copy">
+          <p>&copy; 2013 Philip Nilsson &mdash; powered by&nbsp;<a href="https://github.com/jnordberg/wintersmith">Wintersmith</a>
+          </p>
+        </section>
+      </div>
+    </footer>
+  </body>
+</html>

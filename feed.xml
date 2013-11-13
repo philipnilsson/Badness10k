@@ -5,9 +5,317 @@
     <atom:link href="http://localhost:8080/Badness10k/feed.xml" rel="self" type="application/rss+xml"></atom:link>
     <link>http://localhost:8080/Badness10k</link>
     <description>Exploring the world of software and functional programming, one compile error at a time.</description>
-    <pubDate>Fri, 11 Oct 2013 02:00:00 +0200</pubDate>
+    <pubDate>Sat, 11 Jan 2014 01:00:00 +0100</pubDate>
     <generator>Wintersmith - https://github.com/jnordberg/wintersmith</generator>
     <language>en</language>
+    <item>
+      <title>Patterns for Knockout.js — Proxy Object</title>
+      <link>http://localhost:8080/Badness10k/Badness10k/articles/knockout-patterns-proxy/</link>
+      <pubDate>Sat, 11 Jan 2014 01:00:00 +0100</pubDate>
+      <guid isPermaLink="true">http://localhost:8080/Badness10k/Badness10k/articles/knockout-patterns-proxy/</guid>
+      <author></author>
+      <description>&lt;script src=&quot;/Badness10k/jquery.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;/Badness10k/knockout.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;/Badness10k/knockout-mapping.js&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;Lately, I’ve been looking into patterns in Knockout that will allow
+separation between view- and backend-related code. I’ve been trying to
+find methods of transparently communicating to a server API when
+relevant view model properties change, without explicitly concerning
+the view code.&lt;/p&gt;
+&lt;p&gt;I’m looking for “plain” knockout solutions, that doesn’t have to
+involve the logic of some additional routing library, so we’ll focus
+on using knockout’s main abstraction, observables.&lt;/p&gt;
+&lt;p&gt;This post describes one of the solutions I’ve used for my current project,
+which I will name proxy objects, lacking a better name. We’ll look
+into how to set up observable objects that are automatically persisted
+by posting to an API, and thus decoupling it from the view model.&lt;/p&gt;
+&lt;p&gt;We’re going to build something like the example below, where the
+server is notified as the user changes data in the fields. In the
+right hand column we’ll log “server” (a.k.a console.log) calls to our
+API. Edit the fields to see what calls are made.&lt;/p&gt;
+&lt;div id=&quot;ex&quot; style=&quot;overflow: hidden; padding: 0.5em 0 1em 0&quot;&gt;
+ &lt;div style=&quot;width: 34%; float: left; border: 1px solid lightgray; padding: 2%; font-size: 70%;&quot;&gt;
+  &lt;div&gt; &lt;span style=&quot;width: 32%; display: inline-block;&quot;&gt;First name: &lt;/span&gt; &lt;input data-bind=&quot;value: firstName, valueUpdate: 'afterkeydown'&quot; /&gt; &lt;/div&gt;
+  &lt;div&gt; &lt;span style=&quot;width: 32%; display: inline-block;&quot;&gt;Last name: &lt;/span&gt; &lt;input data-bind=&quot;value: lastName, valueUpdate: 'afterkeydown'&quot; /&gt; &lt;/div&gt;
+  &lt;div&gt; &lt;span style=&quot;width: 32%; display: inline-block;&quot;&gt;Full name: &lt;/span&gt; &lt;input data-bind=&quot;value: fullName, valueUpdate: 'afterkeydown'&quot; /&gt; &lt;/div&gt;
+  &lt;div&gt; &lt;span style=&quot;width: 32%; display: inline-block;&quot;&gt;SSN: &lt;/span&gt; &lt;input data-bind=&quot;value: ssn, valueUpdate: 'afterkeydown'&quot; /&gt; &lt;/div&gt;
+ &lt;/div&gt;
+ &lt;div id=&quot;ex_log&quot; style=&quot;width: 56%; height: 100%; float: right; border: 1px solid lightgray; padding: 2%; font-size: 70%;&quot;&gt;
+    &amp;gt; Change the fields to see how the “API” is called.
+ &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Note that we are ignoring the SSN field, as far as notifying the
+backend goes. In this example we’ll assume the social security number
+is a property that is not editable by the user, but I’ve included an
+editable view for it as an example of a property changing on the view
+model, without triggering a server call.&lt;/p&gt;
+&lt;p&gt;We’re going to write a method &lt;code&gt;proxy&lt;/code&gt; that’ll allow us to set up the
+code for this as follows.&lt;/p&gt;
+&lt;pre&gt;
+var person = {
+  firstName: 'Steve',
+  lastName: 'Sanderson',
+  ssn: '1234',
+  ignore: ['ssn']
+};
+
+ko.applyBindings(
+  new ViewModel(
+    ko.proxy('api/person', person)));
+&lt;/pre&gt;
+
+&lt;h2 id=&quot;implementing-proxy-&quot;&gt;Implementing &lt;code&gt;proxy&lt;/code&gt;&lt;/h2&gt;
+&lt;p&gt;Lets say we’ll start by retreiving the initial state from the server.&lt;/p&gt;
+&lt;pre&gt;
+$.get('api/person', function(init) {
+  ...
+})
+&lt;/pre&gt;
+
+&lt;p&gt;From here we can set up an observable that we could bind to the view,
+using &lt;code&gt;ko.observable(init)&lt;/code&gt;. However, we’d like to react to changes in
+any individual field (i.e. &lt;code&gt;firstName&lt;/code&gt; or &lt;code&gt;lastName&lt;/code&gt;). We can make all
+fields of a javascript object observable by using the 
+&lt;a href=&quot;http://knockoutjs.com/documentation/plugins-mapping.html&quot;&gt;knockout mapping plugin&lt;/a&gt;.&lt;/p&gt;
+&lt;pre&gt;
+$.get('api/person', function(init) {
+  var proxy = ko.mapping.fromJS(init);
+})
+&lt;/pre&gt;
+
+&lt;p&gt;So how can we react to changes in any of the fields of this new
+object? The result from ko.mapping is a javascript object with
+observable fields, but it is not itself observable in its
+entirety. Fortunately this can easily be solved by creating a computed
+observable that uses the mapping-plugin’s reverse mapping
+functionality that takes a mapped object to a plain javascript object.&lt;/p&gt;
+&lt;pre&gt;
+$.get('api/person', function(init) {
+  var proxy = ko.mapping.fromJS(init);
+  ko.computed(function() {
+    console.log(ko.mapping.toJS(proxy));
+  });
+})
+&lt;/pre&gt;
+
+&lt;p&gt;Since the computed calls the reverse-mapping operation, it will
+evalutate each observable in the proxy object, and thus each field
+will be registered as a dependency, so we will now see logging to the
+console whenever any individual field of the proxy is changed.&lt;/p&gt;
+&lt;p&gt;Now all we need to do is to replace the &lt;code&gt;console.log&lt;/code&gt; logging with an
+API call that calls the api. The only new source of complexity is that
+we’d probably like to avoid to call our API directly after
+initializing the first value, as we’d just send the same value back
+anyway, so we keep track of that in variable &lt;code&gt;first&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;
+$.get('api/person', function(init) {
+  var proxy = ko.mapping.fromJS(init);
+  var first = true;
+  ko.computed(function() {
+    var data = ko.mapping.toJS(proxy);
+    if (!first) {
+      $.ajax({
+        type: 'post',
+        url: '/api/person',
+        data: { '': JSON.stringify(data) };
+    }
+    first = false;
+  });
+});
+&lt;/pre&gt;
+
+&lt;p&gt;If we clean this up a bit, putting code into some library function,
+say &lt;code&gt;ko.proxy&lt;/code&gt;, we can set up our view model as&lt;/p&gt;
+&lt;pre&gt;
+$.get('api/person', function(init) {
+  var proxy = ko.proxy('api/person', init);
+  ko.applyBindings(new ViewModel(proxy));
+})
+&lt;/pre&gt;
+
+&lt;p&gt;Note that we have a pretty good separation of concerns. The view model
+does not have to know about server endpoints, or anything about the
+API in order for changes to propagate to the server. It is however
+necessary for the view model code to excercise some restraint in
+updating the proxy object. For instance, if there is any validation to
+be performed by the client, it’d be necessary to bind to another value
+and perform validations on it before pushing changes to the proxy.&lt;/p&gt;
+&lt;p&gt;In a future post I might give more examples on how we can easily
+include this type of validation when using the proxy pattern.&lt;/p&gt;
+&lt;h2 id=&quot;throttling&quot;&gt;Throttling&lt;/h2&gt;
+&lt;p&gt;We’d probably like to perform some sort of throttling before sending
+data to the server, so that we don’t perform an ajax call on
+e.g. every single keystroke for a text input. We can do this easily
+by applying knockout’s &lt;code&gt;throttle&lt;/code&gt; extensions (which really is a
+debounce) on our computed observable.&lt;/p&gt;
+&lt;pre&gt;
+ko.computed(function() {
+  var data = ko.mapping.toJS ( ... )
+  ...
+}).extend({ throttle: 1000 })
+&lt;/pre&gt;
+
+&lt;p&gt;That’s all we need to limit the rate of calls to when the user has
+been inactive for one second.&lt;/p&gt;
+&lt;h2 id=&quot;ignoring-fields&quot;&gt;Ignoring fields&lt;/h2&gt;
+&lt;p&gt;It’s pretty common that the data available in a specific resource in
+the API will contain data that we are not interested in sending back
+to the server. Say our data contains another field for a social
+security number &lt;code&gt;ssn&lt;/code&gt;. The ko.mapping plugin allows us to provide an
+array containing fields we’d like to ignore when doing the reverse
+mapping with &lt;code&gt;ko.mapping.toJS&lt;/code&gt;. &lt;/p&gt;
+&lt;p&gt;Our convention has been for the API itself to provide the list of
+fields it’s not interested in updating, so a response might look
+something like.&lt;/p&gt;
+&lt;pre&gt;
+{ 
+  firstName: 'Ali',
+  lastName: 'Pang',
+  ssn: '1234',
+  ignore: ['ssn']
+}
+&lt;/pre&gt;
+
+&lt;p&gt;We now modify the &lt;code&gt;ko.proxy&lt;/code&gt; code to take this into account.&lt;/p&gt;
+&lt;pre&gt;
+ko.proxy = function (init, endpoint) {
+
+    var ignoreAlways = ['ignore'];
+
+    var obs = ko.mapping.fromJS(init, { ignore: ignoreAlways });
+
+    var first = true;
+    ko.computed(function () {
+        var data = ko.mapping.toJS(obs, {
+            ignore: init.ignore
+        });
+        if (!first)
+            $.post({url: endpoint, data: { '': JSON.stringify(data) } });
+        first = false;
+    }).extend({
+        throttle: 1400
+    });
+    return obs;
+};
+&lt;/pre&gt;
+
+&lt;p&gt;We set things up so that the initial mapping via &lt;code&gt;fromJS&lt;/code&gt; ignore’s the
+&lt;code&gt;ignore&lt;/code&gt; array, as this is not relevant for the view
+model. Additionally, we tell &lt;code&gt;toJS&lt;/code&gt; to ignore the fields from
+&lt;code&gt;init.ignore&lt;/code&gt;, which in this case would be &lt;code&gt;[&amp;#39;ssn&amp;#39;]&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;This will have two benefits.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;We don’t send irrelevant data back to the server. In this example
+we’re not using the &lt;code&gt;ssn&lt;/code&gt; to identify the user, it’s just an
+unchangeable piece of extra data. With this setup, the &lt;code&gt;POST&lt;/code&gt; data
+will not include the &lt;code&gt;ssn&lt;/code&gt; field on its way back to the server,
+saving traffic.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Since the computed observable does not look at the ignored fields
+when reverse mapping, any changes made by the view model to the
+&lt;code&gt;ssn&lt;/code&gt; field will not trigger a server call, as it will not be
+registered as a dependency.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In other words, if the view model calls &lt;code&gt;proxy.ssn(&amp;#39;4567&amp;#39;)&lt;/code&gt;, no call
+will be made to the server. If it calls &lt;code&gt;proxy.name(&amp;#39;Philip&amp;#39;)&lt;/code&gt;, the
+resulting post will not include data for the social security number.&lt;/p&gt;
+&lt;h2 id=&quot;setting-up-the-view-model&quot;&gt;Setting up the view model&lt;/h2&gt;
+&lt;p&gt;To complete this example, we can apply standard patterns, such as this
+example, adding a full name property, from the knockout tutorial. It will
+continue to work as expected.&lt;/p&gt;
+&lt;pre&gt;
+function ViewModel(proxy) {
+    this.firstName = proxy.firstName;
+    this.lastName = proxy.lastName;
+
+    this.fullName = ko.computed({
+        read: function () {
+            return this.firstName() + &quot; &quot; + this.lastName();
+        },
+        write: function (value) {
+            var lastSpacePos = value.lastIndexOf(&quot; &quot;);
+            if (lastSpacePos &gt; 0) { 
+                this.firstName(
+                  value.substring(0, lastSpacePos));
+                this.lastName(
+                  value.substring(lastSpacePos + 1));
+            }
+        },
+        owner: this
+    });
+}
+
+ko.applyBindings(
+  new ViewModel(
+    ko.proxy('api/person', {
+      firstName: 'Steve',
+      lastName: 'Sanderson',
+      ssn: '1234',
+      ignore: ['ssn']
+    })));
+&lt;/pre&gt;
+
+&lt;script&gt;
+
+ko.proxy = function (init, endpoint) {
+
+    var ignoreAlways = ['ignore'];
+
+    var obs = ko.mapping.fromJS(init, { ignore: ignoreAlways });
+
+    var first = true;
+    ko.computed(function () {
+        var data = ko.mapping.toJS(obs, {
+            ignore: init.ignore
+        });
+        data = JSON.stringify(data);
+        if (!first) {
+            $('#ex_log').prepend('&lt;div&gt;' + '&amp;gt; Sending: ' + data + '&lt;/div&gt;');
+            $('#ex_log div:gt(5)').remove()
+        }
+        first = false;
+    }).extend({
+        throttle: 1000
+    });
+    return obs;
+};
+
+function ViewModel(proxy) {
+    this.firstName = proxy.firstName;
+    this.lastName = proxy.lastName;
+    this.ssn = proxy.ssn;
+
+    this.fullName = ko.computed({
+        read: function () {
+            return this.firstName() + &quot; &quot; + this.lastName();
+        },
+        write: function (value) {
+            var lastSpacePos = value.lastIndexOf(&quot; &quot;);
+            if (lastSpacePos &gt; 0) { 
+                this.firstName(
+                  value.substring(0, lastSpacePos));
+                this.lastName(
+                  value.substring(lastSpacePos + 1));
+            }
+        },
+        owner: this
+    });
+}
+
+ko.applyBindings(
+  new ViewModel(
+    ko.proxy({
+      firstName: 'Steve',
+      lastName: 'Sanderson',
+      ssn: '1234',
+      ignore: ['ssn']
+    })), document.getElementById('ex'));
+
+&lt;/script&gt;</description>
+    </item>
     <item>
       <title>A functional solution to Twitter's waterflow problem</title>
       <link>http://localhost:8080/Badness10k/Badness10k/articles/waterflow/</link>

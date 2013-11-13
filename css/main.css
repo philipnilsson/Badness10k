@@ -455,3 +455,11 @@ code.lang-markdown .bullet {
     margin-bottom: 1em;
   }
 }
+.example {
+    padding: 1em;
+    border: 1px solid lightgray;
+    margin: 1em 0;
+}
+input {
+  padding: 0.3em;
+}
