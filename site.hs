@@ -43,12 +43,6 @@ main = hakyll $ do
                 >>= loadAndApplyTemplate "templates/default.html" archiveCtx
                 >>= relativizeUrls
 
-    create ["atom.xml"] $ do
-      route     idRoute
-      compile $ loadAllSnapshots "posts/*" "content"
-        >>= fmap (take 10) . recentFirst
-        >>= renderAtom feedCfg feedCtx
-
     match "index.html" $ do
         route idRoute
         compile $ do
@@ -64,6 +58,13 @@ main = hakyll $ do
                 >>= relativizeUrls
 
     match "templates/*" $ compile templateCompiler
+
+    create ["atom.xml"] $ do
+      route     idRoute
+      compile $ loadAllSnapshots "posts/*" "content"
+        >>= fmap (take 10) . recentFirst
+        >>= renderAtom feedCfg feedCtx
+
 
 
 --------------------------------------------------------------------------------
