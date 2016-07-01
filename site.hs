@@ -25,6 +25,7 @@ main = hakyll $ do
         route $ setExtension "html"
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/post.html"    postCtx
+            >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/default.html" postCtx
             >>= relativizeUrls
 
@@ -42,6 +43,11 @@ main = hakyll $ do
                 >>= loadAndApplyTemplate "templates/default.html" archiveCtx
                 >>= relativizeUrls
 
+    create ["atom.xml"] $ do
+      route     idRoute
+      compile $ loadAllSnapshots "posts/*" "content"
+        >>= fmap (take 10) . recentFirst
+        >>= renderAtom feedCfg feedCtx
 
     match "index.html" $ do
         route idRoute
@@ -65,3 +71,18 @@ postCtx :: Context String
 postCtx =
     dateField "date" "%B %e, %Y" `mappend`
     defaultContext
+
+feedCfg :: FeedConfiguration
+feedCfg = FeedConfiguration
+  { feedTitle       = "Badness 10k - All posts"
+  , feedDescription = "Functional programming patterns"
+  , feedAuthorName  = "Philip Nilsson"
+  , feedAuthorEmail = "alipang@gmail.com"
+  , feedRoot        = "http://philipnilsson.github.io/Badness10k/"
+  }
+
+feedCtx :: Context String
+feedCtx = mconcat
+  [ bodyField "description"
+  , defaultContext
+  ]
