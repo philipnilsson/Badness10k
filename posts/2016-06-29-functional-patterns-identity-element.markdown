@@ -135,7 +135,7 @@ min(∞, x) = x;
 min(x, ∞) = x;
 ```
 
-If you wish, try to make a similar argument for negative infinity, and
+**Exercise** Make a similar argument for negative infinity, and
 choose a suitable operation to prove it's "emptiness".
 
 Note that this means that for a given domain, multiple empty objects
@@ -184,7 +184,8 @@ occasion choosing a model so that such an element can be found, for
 instance using forests over trees.
 
 Consider the build system `gulp`, where we can describe a build step
-to minify our code base, but only in production, in the following manner.
+to minify our code base in production mode only with the following
+definition.
 
 ```javascript
 const optimize = env.production

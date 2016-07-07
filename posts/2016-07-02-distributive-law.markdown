@@ -8,9 +8,10 @@ Introduction
 The pattern of **Distributive Law** describes conditions for
 coherently decomposing a problem into subproblems, and recomposing
 their partial solutions into a full one, for instance in a divide and
-conquer style.
+conquer style. They can also be applied "in reverse" as a factoring
+optimization.
 
-A distributive law familiar to most is the identity on numbers
+A distributive law familiar to most is the below identity on numbers
 
 ```javascript
 a * (b + c) = (a * b) + (a * c)
@@ -21,7 +22,7 @@ To recognize that this equation is of a "divide and conquer" form,
 it's important to have some intuition as to why this law is true. This
 is most easily done through a geometric argument.
 
-``` ::: IMG: areas of rectangle :::```
+![](../images/distributive-law.png)
 
 Intuitively the area of the larger rectangle above can be found in two
 ways --- by taking its side and multiplying by its height,
@@ -30,22 +31,8 @@ areas of the two smaller rectangles, `a * b + a * c`.
 
 <hr>
 
-We can extend the approach above to approximate the area under a given
-curve by splitting this area into small rectangle segments, and taking
-the [riemann sum](https://en.wikipedia.org/wiki/Riemann_sum) of their
-areas.
-
-``` ::: IMG: curve areas :::```
-
-The mathematical method of *integration* takes the limit of this sum
-resulting in an expression involving the anti-derivate. Integration
-thus belongs in the divide and conquer school of problem solving, in
-fact involving infinitely many "divisions".
-
-<hr>
-
-Computer science's most well known divide and conquer algorithm is
-likely merge-sort, which is based on the following equivalence.
+The most well known divide and conquer algorithm is likely merge-sort,
+which is based on the following equivalence.
 
 ```javascript
 sort(concat(ls, rs)) = merge(sort(ls), sort(rs))
@@ -54,20 +41,35 @@ sort(concat(ls, rs)) = merge(sort(ls), sort(rs))
 
 Again, we start by splitting the problem in two, writing a list as the
 concatenation of its first and second halves `ls` and `rs`. These
-lists are then individually sorted, and recomposed by the `merge`
+lists are individually sorted, and recomposed by the `merge`
 operation.
 
-This reveals the full generality of a distributive law. We say that
-`sort` distributes over `concat` into `merge`, where we are allowed to
+This illustrates the full generality of a distributive law. We say
+that `sort` distributes over `concat` into `merge`. We are allowed to
 change the method of recomposition as we distribute into subproblems.
 
-In fact you can argue that even in our example of applying the
-distributive law on numbers, factoring out the multiplication changes
-the addition --- from addition on lengths, into addition on areas.
+In fact you can argue that even in our example of the distributive law
+on numbers, factoring out the multiplication changes the addition ---
+from addition on lengths, into addition on areas.
 
 **Exercise:** If you have a hard time seeing that the equations *1*
 and *2* above are of the same form, rewrite them changing operators to
 functions or functions to operators.
+
+*Hint*: introduce functions
+`addLengths` and `addAreas` and use them in place of `+`.
+
+Definition
+----------
+
+A distributive law is a coherence condition for decomposition and
+reassemly satisfying that for all `a` and `b`
+
+```
+f(g(b, c)) = h(f(b), f(c))
+```
+
+We say that `f` distributes over `g` into `h`.
 
 Additional Examples
 -------------------
@@ -84,26 +86,28 @@ a || (b && c) = (a || b) && (a || c)
 
 <hr>
 
-The `max` operator distributes over `min`, and vice versa
+The `max` operator distributes over `min`, and vice versa. These
+distributive laws are useful in understanding the concept of
+[Minmax:ing](https://en.wikipedia.org/wiki/Minimax).
 
 ```javascript
-max(a, min b c) = min (max a b, max a c)
+max a (min b c) = min (max a b) (max a c)
 ```
 ```javascript
-min(a, max b c) = max (min a b, min a c)
+min a (max b c) = max (min a b) (min a c)
 ```
 
 <hr>
 
-The functional programming combinator `map` distributes over function
+In functional programming, the combinator `map` distributes over function
 composition `∘`.
 
 ```javascript
 map (f ∘ g) = map f ∘ map g
 ```
 
-That is, mapping a list first with function `f`, and the with function `g`, is the same
-as mapping in a single pass with the composed function `f ∘ g`.
+<!-- That is, mapping a list first with function `f`, and the with function `g`, is the same -->
+<!-- as mapping in a single pass with the composed function `f ∘ g`. -->
 
 This distributive law is one of the two Functor laws, the other
 one being
@@ -111,9 +115,9 @@ one being
 
 <hr>
 
-We can define the composition of comparators `<>`, such that `c <> d`
+We can define the composition of comparators `⊕`, such that `c ⊕ d`
 compares by comparator `c`, then by `d` if `c` compares to
-equals. That is, the comparator `compareLastName <> compareFirstName`
+equals. That is, the comparator `compareLastName ⊕ compareFirstName`
 compares by last name, then by first name.
 
 **Exercise** Prove that comparators form a monoid.
@@ -122,19 +126,16 @@ A *stable* sorting algorithm will satisify the distributive
 law
 
 ```javascript
-sortBy (f <> g) = sortBy f ∘ sortBy g
+sortBy (f ⊕ g) = sortBy f ∘ sortBy g
 ```
-
-
-Definition
-----------
 
 Applications
 ------------
 
 Making practical use of a distributive law in software engineering can
-be used to guide the design of an API, making it easier for its users
-to split problems into smaller composable subproblems.
+involve using such a rule to guide the design of an API, making it
+easier for its users to split problems into smaller composable
+subproblems.
 
 As a case study, we take the reactive programming libraries `Bacon.js`
 and `Rx.js` providing event-stream abstractions to javascript.
@@ -159,6 +160,10 @@ streams and merging their results. Satisfying this rule is likely to
 result in an easier time for users to reliably decompose problems
 involving streams into smaller constituent parts.
 
-Is is possible other formal arguments can be made in favour of the
+Is is possible other formal arguments can be made in favour of
 `Rx.js`'s default behaviour. (The author of this article is a
 contributor to `Bacon.js`).
+
+**Exercise** Confirm that the `sample` operator defined by the marble
+diagram for `Bacon.js` distributes over `merge`, while the `Rx.js` one
+does not.
