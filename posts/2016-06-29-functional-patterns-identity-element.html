@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Badness 10.000 - Algebraic patterns - Identity element</title>
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+    <link rel="stylesheet" type="text/css" href="../css/pandoc.css" />
+    <link rel="alternate" type="application/rss+xml" href="http://philipnilsson.github.io/Badness10k/atom.xml" title="RSS feed for this page" />
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="logo">
+        <a href="../">Badness 10.000</a>
+      </div>
+      <div id="navigation">
+        <a href="../">About</a>
+      </div>
+    </div>
+
+    <div id="content">
+      <h1>Algebraic patterns - Identity element</h1>
+
+      <div class="info">
+    Posted on June 29, 2016
+    
+</div>
+
+<h2 id="introduction">Introduction</h2>
+<p>The pattern <strong>Identity element</strong> is all about defining the concept of <em>emptiness</em>, and is a good introduction to algebraically modelling programming concepts.</p>
+<p>There are certain values — probably found scattered around the code you’re working on right now — values like the numbers <code>1</code> and <code>0</code>, the empty string <code>&quot;&quot;</code> or the empty array <code>[]</code>, that are often used as initializers and somehow feel “empty” or uninteresting.</p>
+<p>The identity element pattern allows us to formalize this notion in a precise way, letting us explain just why these values are so common. That is, in a given code base, you’re probably more likely to see the string <code>&quot;&quot;</code>, than say, the string <code>&quot;banana&quot;</code>, and the number <code>0</code> more than the number <code>4279</code>. Is there some way we can explain what makes these values special?</p>
+<hr>
+<p>Imagine an empty glass. How can we define what it means for a glass to be empty? Now, of course, it is easy to do so informally, I just asked you to visualize one. But what is a formal property the empty glass satisfies, that non-empty glasses do not?</p>
+<p>The key idea here will be to define an additional operation to <em>combine</em> two glasses. We will call this operation <strong>pour</strong>, and define it as taking two glasses and pouring their contents into a new identical container.</p>
+<div class="figure">
+<img src="../images/pour.png" />
+
+</div>
+<p>Equipped with this operation, we can find a property fulfilled by the empty glass and the empty glass alone: Pouring the contents of the empty glass into another glass leaves the other glass unchanged.</p>
+<div class="figure">
+<img src="../images/empty2.png" />
+
+</div>
+<p>and similarly, pouring the contents of any glass into the empty glass</p>
+<div class="figure">
+<img src="../images/empty1.png" />
+
+</div>
+<p>Formally, we can write this as the following pair of equations, where <code>x</code> represents any arbitrary glass.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">pour(emptyGlass, x) <span class="fu">=</span> x
+pour(x, emptyGlass) <span class="fu">=</span> x</code></pre></div>
+<h2 id="definition">Definition</h2>
+<p>We can now take a look our other “empty” values, and check if they satisfy similar properties. And in fact, we will see that they do.</p>
+<p>Take the number <code>0</code>. To say that <code>0</code> is in our sense empty, we will need to find an operation such that the equations above hold. We will take the operation <code>add</code>, which adds two numbers together, i.e. the operation such that <code>add(3, 9) = 12</code>. Now, it’s clear that</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="at">add</span>(<span class="dv">0</span><span class="op">,</span> x) <span class="op">=</span> x
+<span class="at">add</span>(x<span class="op">,</span> <span class="dv">0</span>) <span class="op">=</span> x</code></pre></div>
+<p>so the value <code>0</code> is in fact <em>empty</em> according to our definition. In particular we say that <code>0</code> is the identity element with respect to the addition operation.</p>
+<hr>
+<p>What about the empty array, or the empty string? We’ll kill two birds with one stone. Define the operation <code>concat</code>, such that <code>concat(&quot;foo&quot;, &quot;bar&quot;) = &quot;foobar&quot;</code>, and <code>concat([1,2,3], [4,5]) = [1,2,3,4,5]</code>. Then</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="at">concat</span>(<span class="st">&quot;&quot;</span><span class="op">,</span> x) <span class="op">=</span> x
+<span class="at">concat</span>(x<span class="op">,</span> <span class="st">&quot;&quot;</span>) <span class="op">=</span> x</code></pre></div>
+<p>and</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="at">concat</span>([]<span class="op">,</span> x) <span class="op">=</span> x
+<span class="at">concat</span>(x<span class="op">,</span> []) <span class="op">=</span> x</code></pre></div>
+<p>The empty array, and the empty string, are identity elements with respect to their concatenation operations, and so their emptiness can be formally described.</p>
+<p>In general we say that for a set <code>A</code> with a closed binary operation ⊕, an empty (identity) element <code>e</code> is an element in <code>A</code> such that for all <code>x</code> in <code>A</code> we have</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">x ⊕ e <span class="op">=</span> x
+e ⊕ x <span class="op">=</span> x</code></pre></div>
+<h2 id="additional-examples">Additional Examples</h2>
+<p>We could go on all day finding examples of identity elements, they are quite common, and there are plenty hiding in the wild. Let’s look at couple more.</p>
+<p>First, let’s continue in the domain of numbers. We’ll take another special value: infinity, or <code>∞</code>. Infinity might seems like the opposite of “empty”, but it will turn out to be an example of an identity element. How exactly can we say that infinity is an empty element of the numbers?</p>
+<p>To understand this, think of upper bounds. Let’s say I make the statement, <em>“The oldest person in the room is at most 80 years old”</em>. This means I claim to have some information about how old the people in the room are. But what if I had absolutely no clue? One way to express this could be saying <em>“The oldest person in the room is at most ∞ years old”</em>.</p>
+<p>Infinity, seen as an <em>upper bound</em>, conveys no information, and is thus in this sense empty. What operation should we choose to express this notion? The answer is to use the <code>min</code> operator.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="at">min</span>(∞<span class="op">,</span> x) <span class="op">=</span> x<span class="op">;</span>
+<span class="at">min</span>(x<span class="op">,</span> ∞) <span class="op">=</span> x<span class="op">;</span></code></pre></div>
+<p><strong>Exercise</strong> Make a similar argument for negative infinity, and choose a suitable operation to prove it’s “emptiness”.</p>
+<p>Note that this means that for a given domain, multiple empty objects may exist, with different choices of operators to give meaning to a specific sense of emptiness. Another value we can choose is <code>1</code> with the operation <code>mul</code>, such that <code>mul(5,3) = 15</code>.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="at">mul</span>(<span class="dv">1</span><span class="op">,</span> x) <span class="op">=</span> x<span class="op">;</span>
+<span class="at">mul</span>(x<span class="op">,</span> <span class="dv">1</span>) <span class="op">=</span> x<span class="op">;</span></code></pre></div>
+<p>This interpretation of emptiness is combinatorial in nature.</p>
+<hr>
+<p>Another important example is the <em>identity function</em>, <code>(x =&gt; x)</code>, or <code>id</code> as it’s often called. The identity function is the function that takes an input and returns it unchanged. That is <code>id(3) = 3</code>, or generally, <code>id(x) = x</code></p>
+<p>What operation could we choose to see that this is an identity element? The operators we’re interested in are usually some natural way of composing two elements, so the answer of course, is to choose function composition: <code>(f, g) =&gt; x =&gt; f(g(x))</code>, or as it is often written, the operator ∘. We then get the equations</p>
+<pre><code>f ∘ id = f
+id ∘ f = f</code></pre>
+<p>This simply states that to process either the input or the output of a function by applying the identity function is a no-op.</p>
+<p>If you ever wondered where the identity function derives its name from, we see it is because it’s an identity element with respect to function composition <code>∘</code>.</p>
+<h2 id="applications">Applications</h2>
+<p>The key to making practical use of the identity element pattern is usually to simply recognize that such an element exists, or on occasion choosing a model so that such an element can be found, for instance using forests over trees.</p>
+<p>Consider the build system <code>gulp</code>, where we can describe a build step to minify our code base in production mode only with the following definition.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">const</span> optimize <span class="op">=</span> <span class="va">env</span>.<span class="at">production</span>
+    <span class="op">?</span> <span class="at">minify</span>()
+    : <span class="va">util</span>.<span class="at">noop</span>()<span class="op">;</span>
+
+<span class="va">gulp</span>.<span class="at">task</span>(<span class="st">'build'</span><span class="op">,</span> () <span class="op">=&gt;</span> <span class="op">{</span>
+    <span class="cf">return</span> <span class="at">browserify</span>(source).<span class="at">pipe</span>(optimize)<span class="op">;</span>
+<span class="op">}</span>)<span class="op">;</span></code></pre></div>
+<p>We describe our optimization step as the stream processor <code>minify</code>, if our environment is configured to production, and to the identity element for the operation <code>pipe</code>, named <code>util.noop</code>, otherwise.</p>
+<p>A no-op might seem like a useless build step, but we can see this code elegantly avoids awkward if-statements in the build task itself, delegating the responsibility of disabling optimizations to the optimization task.</p>
+<p>If we were to design a build system ourselves, adding a no-op might not be an obvious inclusion, but equipped with understanding of the identity element pattern we can more easily identify its value.</p>
+
+    </div>
+    <div id="footer">
+      <div>Site proudly generated by <a href="http://jaspervdj.be/hakyll">Hakyll</a></div>
+      <a type="application/rss+xml" href="http://philipnilsson.github.io/Badness10k/atom.xml">RSS feed for this page</a>
+
+    </div>
+  </body>
+</html>

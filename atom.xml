@@ -8,8 +8,96 @@
         <name>Philip Nilsson</name>
         <email>alipang@gmail.com</email>
     </author>
-    <updated>2016-06-29T00:00:00Z</updated>
+    <updated>2016-07-14T00:00:00Z</updated>
     <entry>
+    <title>Algebraic patterns - Semigroup</title>
+    <link href="http://philipnilsson.github.io/Badness10k//posts/2016-07-14-functional-patterns-semigroup.html" />
+    <id>http://philipnilsson.github.io/Badness10k//posts/2016-07-14-functional-patterns-semigroup.html</id>
+    <published>2016-07-14T00:00:00Z</published>
+    <updated>2016-07-14T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<div class="info">
+    Posted on July 14, 2016
+    
+</div>
+
+<h2 id="introduction">Introduction</h2>
+<p>An important concept in functional programming is that of <em>composition</em>, where an aggregate or complex element can be described as the assembly of smaller parts.</p>
+<p>Not all forms of composition are the same however. Consider the two problems</p>
+<ol style="list-style-type: decimal">
+<li>Assembling the pieces of a jigsaw-puzzle.</li>
+<li>Assemble a piece of IKEA furniture from its parts.</li>
+</ol>
+<p>Putting puzzle pieces together and assembling furniture both involve composing smaller pieces into more complex, aggregate parts.</p>
+<p>There is a difference between these two activities however, in that the assembly of furniture is highly linear and sequential. Generally it is necessary to start at the very first page of the manual, and following the instructions in order, from the first to the last.</p>
+<p>Solving a puzzle is more freeform. Pieces from anywhere within it can be put together without enforcing any particlar order, like starting in the top left corner. This means solving a puzzle is easily parallelizable — simply enlist a friend to help solve a different part of the puzzle than yourself, and at any point combine the pieces from both efforts if possible.</p>
+<p>Can we algebraically describe the difference between these two problems? It turns out that it is easy to do so, by introducing a simple requirement on the method of composition. The key observation is that composition of puzzle pieces satisfy the following rule.</p>
+<p><img src="../images/puzzle-pieces.png" style="width: 60%"/></p>
+<p>That is, given three puzzle pieces, these can be put together in two different ways, starting by combining the first and second, or staring with the second and third. Either way the final result is required to be the same.</p>
+<p><img src="../images/pieces-composed.png" style="width: 60%"/></p>
+<p>A method of composition satisfying the above constraint is said to be <em>associative</em>. For a larger set of puzzle pieces the associativity law can be repeatedly applied, until it is possible to make the statement that a jigsaw can be assembled in any order.</p>
+<h2 id="definition">Definition</h2>
+<p>A <strong>Semigroup</strong> is a data type together with a method of composition, ⊕, satisfying the associativity rule</p>
+<pre><code>a ⊕ (b ⊕ c) = (a ⊕ b) ⊕ c</code></pre>
+<h2 id="examples">Examples</h2>
+<p>Numbers with addition are Semigroups, as well as numbers with multiplication, maximum and minimum. Note that this means that as with <a href="./2016-06-29-functional-patterns-identity-element.html">Identity elements</a>, the same datatype can have a given algebraic structure in multiple ways.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">a <span class="op">+</span> (b <span class="op">+</span> c) <span class="op">=</span> (a <span class="op">+</span> b) <span class="op">+</span> c
+a <span class="op">*</span> (b <span class="op">*</span> c) <span class="op">=</span> (a <span class="op">*</span> b) <span class="op">*</span> c
+<span class="at">max</span>(a<span class="op">,</span> <span class="at">max</span>(b<span class="op">,</span> c)) <span class="op">=</span> <span class="at">max</span>(<span class="at">max</span>(a<span class="op">,</span> b)<span class="op">,</span> c)
+<span class="at">min</span>(a<span class="op">,</span> <span class="at">min</span>(b<span class="op">,</span> c)) <span class="op">=</span> <span class="at">min</span>(<span class="at">min</span>(a<span class="op">,</span> b)<span class="op">,</span> c)</code></pre></div>
+<hr>
+<p>Strings with string-concatenation form a semigroup. We write <code>++</code> for concatenation, so <code>&quot;foo&quot; ++ &quot;bar&quot;</code> is <code>&quot;foobar&quot;</code>. Clearly it holds that</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">a <span class="op">++</span> (b <span class="op">++</span> c) <span class="op">=</span> (a <span class="op">++</span> b) <span class="op">++</span> c</code></pre></div>
+<p>Similarly, lists or arrays, with list/array-concatenation are semigroups. We write <code>++</code> also for this type of concatenation, so <code>[1, 2] ++ [3, 4, 5]</code> is <code>[1, 2, 3, 4, 5]</code></p>
+<hr>
+<p>The booleans are semigroups, with both <code>||</code> and <code>&amp;&amp;</code></p>
+<pre><code>a &amp;&amp; (b &amp;&amp; c) = (a &amp;&amp; b) &amp;&amp; c
+a || (b || c) = (a || b) || c</code></pre>
+<hr>
+<p>A very important associative operation is function composition. That is, for a triple of functions <code>f</code>, <code>g</code> and <code>h</code></p>
+<pre><code>f ∘ (g ∘ h) = (f ∘ g) ∘ h</code></pre>
+<p>Matrix multiplication is a binary operation that encodes the behaviour of composition of linear functions, and is thus also associative, making the set of <code>n</code>-by-<code>n</code> matrices a semigroup for any <code>n</code>.</p>
+<hr>
+<p>A <em>frequency map</em> is a map from values to “frequencies”, which are numbers intuitively representing the number of times a particular value has been “counted”. This is a natural way of modelling e.g. the outcome of an election. In an election with candidates <code>A</code>, <code>B</code>, <code>C</code> and <code>D</code>, the results of counting the votes can be represented as a frequency map.</p>
+<pre><code>{ A: 2, B: 4, C: 3, D: 1 }</code></pre>
+<figcaption>
+A frequency map example, where candidate <code>A</code> has 2 votes, <code>B</code> has 4 etc
+</figcaption>
+<p>The composition operation simply adds frequencies.</p>
+<pre><code>addFrequencies({ A: 2, B: 1, C: 3 }, { B: 3, C: 1, D: 5 })
+&gt;&gt; { A: 2, B: 4, C: 4, D: 5 }</code></pre>
+<p>This operation is associative for all values. Notice that calculating the results of an election is a typical example of a parallelizable problem. No single person counts each vote in a large election, but rather results are aggregated first by district, the summarized into complete results. The fact that this is possible to do is neatly described algebraically by the associativity of the <code>addFrequencies</code> operation.</p>
+<hr>
+<p>Comparators are semigroups. A comparator is a function from two values to the set <code>{ LESS, EQUAL, GREATER }</code>. In Java and many other languages <code>LESS</code> is represented by any number &lt; <code>0</code>, <code>EQUAL</code> by <code>0</code> and <code>GREATER</code> by any number &gt; <code>0</code>, so that one can write</p>
+<pre><code>function compareNumbers(i, j) {
+    return i - j;
+}</code></pre>
+<p>The result of composing two comparators is a new comparator that compares by its parts in right-biased-order. For instance <code>firstNameComparator ⊕ lastNameComparator</code> is a comparator that compares first by <code>lastName</code> then by <code>firstName</code>.</p>
+<pre><code>function composeComparators(c, d) {
+   return (x, y) =&gt; {
+      const comparisonResult = d(x, y);
+      if (comparisonResult === EQUAL) {
+        return c(x, y);
+      }
+      return comparisonResult;
+   };
+}</code></pre>
+<p>As an exercise, check that comparator-composition is associative to verify that comparators for a semigroup.</p>
+<hr>
+<p>A “weird” associative operation is <code>⨮</code>, which is defined as</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">x ⨮ y <span class="op">=</span> y</code></pre></div>
+<p>that is, it takes two arguments and discards the first. <em>Any</em> type is a semigroup paired with this operation.</p>
+<p>Similary one can define <code>⨭</code> as the operation that discards its second argument, also forming the composition of a semigroup.</p>
+<hr>
+<p>Pairs of elements that are semigroups are semigroups with composition defined component-wise. For example <code>(4, &quot;foo&quot;) ⊕ (7, &quot;bar&quot;) = (11, &quot;foobar&quot;)</code> where we use the <code>+</code> semigroup on numbers and <code>++</code> on strings.</p>
+<h2 id="applications">Applications</h2>
+<p>The associativity condition is a suitable design goal in many situations, for the reason that it encodes the notion that the order of taking operations is irrelevant. Note that this is different from saying that the order of <em>elements</em> is important. For instance the expression <code>&quot;foo&quot; ++ &quot;bar&quot;</code> is not the same as <code>&quot;bar&quot; ++ &quot;foo&quot;</code>.</p>
+<p>Complex behaviour described through associative composition is simpler and easier to understand, since the order of operations is not important.</p>
+<p>A notable example in the javascript world that <em>fails</em> the associativity condition is the <code>.pipe</code> method in the <code>gulp</code> build system.</p>
+<hr>
+<p>The form of parallelism induced by the associativity of the semigroup operation is heavily relied upon in the <em>Map-Reduce</em> programming model. We’ll expound on this in more detail in a later article, as this is more easily developed algebraically after defining the concept of a <em>Monoid</em>.</p>
+]]></summary>
+</entry>
+<entry>
     <title>Algebraic patterns - Identity element</title>
     <link href="http://philipnilsson.github.io/Badness10k//posts/2016-06-29-functional-patterns-identity-element.html" />
     <id>http://philipnilsson.github.io/Badness10k//posts/2016-06-29-functional-patterns-identity-element.html</id>
@@ -68,7 +156,7 @@ e ⊕ x <span class="op">=</span> x</code></pre></div>
 <p>Infinity, seen as an <em>upper bound</em>, conveys no information, and is thus in this sense empty. What operation should we choose to express this notion? The answer is to use the <code>min</code> operator.</p>
 <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="at">min</span>(∞<span class="op">,</span> x) <span class="op">=</span> x<span class="op">;</span>
 <span class="at">min</span>(x<span class="op">,</span> ∞) <span class="op">=</span> x<span class="op">;</span></code></pre></div>
-<p>If you wish, try to make a similar argument for negative infinity, and choose a suitable operation to prove it’s “emptiness”.</p>
+<p><strong>Exercise</strong> Make a similar argument for negative infinity, and choose a suitable operation to prove it’s “emptiness”.</p>
 <p>Note that this means that for a given domain, multiple empty objects may exist, with different choices of operators to give meaning to a specific sense of emptiness. Another value we can choose is <code>1</code> with the operation <code>mul</code>, such that <code>mul(5,3) = 15</code>.</p>
 <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="at">mul</span>(<span class="dv">1</span><span class="op">,</span> x) <span class="op">=</span> x<span class="op">;</span>
 <span class="at">mul</span>(x<span class="op">,</span> <span class="dv">1</span>) <span class="op">=</span> x<span class="op">;</span></code></pre></div>
@@ -82,7 +170,7 @@ id ∘ f = f</code></pre>
 <p>If you ever wondered where the identity function derives its name from, we see it is because it’s an identity element with respect to function composition <code>∘</code>.</p>
 <h2 id="applications">Applications</h2>
 <p>The key to making practical use of the identity element pattern is usually to simply recognize that such an element exists, or on occasion choosing a model so that such an element can be found, for instance using forests over trees.</p>
-<p>Consider the build system <code>gulp</code>, where we can describe a build step to minify our code base, but only in production, in the following manner.</p>
+<p>Consider the build system <code>gulp</code>, where we can describe a build step to minify our code base in production mode only with the following definition.</p>
 <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">const</span> optimize <span class="op">=</span> <span class="va">env</span>.<span class="at">production</span>
     <span class="op">?</span> <span class="at">minify</span>()
     : <span class="va">util</span>.<span class="at">noop</span>()<span class="op">;</span>
@@ -93,125 +181,6 @@ id ∘ f = f</code></pre>
 <p>We describe our optimization step as the stream processor <code>minify</code>, if our environment is configured to production, and to the identity element for the operation <code>pipe</code>, named <code>util.noop</code>, otherwise.</p>
 <p>A no-op might seem like a useless build step, but we can see this code elegantly avoids awkward if-statements in the build task itself, delegating the responsibility of disabling optimizations to the optimization task.</p>
 <p>If we were to design a build system ourselves, adding a no-op might not be an obvious inclusion, but equipped with understanding of the identity element pattern we can more easily identify its value.</p>
-]]></summary>
-</entry>
-<entry>
-    <title>2016-06-29-functional-patterns-identity-element</title>
-    <link href="http://philipnilsson.github.io/Badness10k//posts/2016-06-29-functional-patterns-identity-element.html" />
-    <id>http://philipnilsson.github.io/Badness10k//posts/2016-06-29-functional-patterns-identity-element.html</id>
-    <published>2016-06-29T00:00:00Z</published>
-    <updated>2016-06-29T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<div class="info">
-    Posted on June 29, 2016
-    
-</div>
-
-<div id="header">
-<div id="logo">
-<a href="../">Badness 10.000</a>
-</div>
-<div id="navigation">
-<a href="../">About</a>
-</div>
-</div>
-<div id="content">
-<h1 id="algebraic-patterns---identity-element">Algebraic patterns - Identity element</h1>
-<div class="info">
-Posted on June 29, 2016
-</div>
-<h2 id="introduction">Introduction</h2>
-<p>The pattern <strong>Identity element</strong> is all about defining the concept of <em>emptiness</em>, and is a good introduction to algebraically modelling programming concepts.</p>
-<p>There are certain values — probably found scattered around the code you’re working on right now — values like the numbers <code>1</code> and <code>0</code>, the empty string <code>&quot;&quot;</code> or the empty array <code>[]</code>, that are often used as initializers and somehow feel “empty” or uninteresting.</p>
-<p>The identity element pattern allows us to formalize this notion in a precise way, letting us explain just why these values are so common. That is, in a given code base, you’re probably more likely to see the string <code>&quot;&quot;</code>, than say, the string <code>&quot;banana&quot;</code>, and the number <code>0</code> more than the number <code>4279</code>. Is there some way we can explain what makes these values special?</p>
-<hr />
-<p>Imagine an empty glass. How can we define what it means for a glass to be empty? Now, of course, it is easy to do so informally, I just asked you to visualize one. But what is a formal property the empty glass satisfies, that non-empty glasses do not?</p>
-<p>The key idea here will be to define an additional operation to <em>combine</em> two glasses. We will call this operation <strong>pour</strong>, and define it as taking two glasses and pouring their contents into a new identical container.</p>
-<div class="figure">
-<img src="../images/pour.png" />
-</div>
-<p>Equipped with this operation, we can find a property fulfilled by the empty glass and the empty glass alone: Pouring the contents of the empty glass into another glass leaves the other glass unchanged.</p>
-<div class="figure">
-<img src="../images/empty2.png" />
-</div>
-<p>and similarly, pouring the contents of any glass into the empty glass</p>
-<div class="figure">
-<img src="../images/empty1.png" />
-</div>
-<p>Formally, we can write this as the following pair of equations, where <code>x</code> represents any arbitrary glass.</p>
-<div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">pour(emptyGlass, x) <span class="fu">=</span> x
-pour(x, emptyGlass) <span class="fu">=</span> x</code></pre></div>
-</div>
-<h2 id="definition">Definition</h2>
-<p>We can now take a look our other “empty” values, and check if they satisfy similar properties. And in fact, we will see that they do.</p>
-<p>Take the number <code>0</code>. To say that <code>0</code> is in our sense empty, we will need to find an operation such that the equations above hold. We will take the operation <code>add</code>, which adds two numbers together, i.e. the operation such that <code>add(3, 9) = 12</code>. Now, it’s clear that</p>
-<div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="at">add</span>(<span class="dv">0</span><span class="op">,</span> x) <span class="op">=</span> x
-<span class="at">add</span>(x<span class="op">,</span> <span class="dv">0</span>) <span class="op">=</span> x</code></pre></div>
-</div>
-<p>so the value <code>0</code> is in fact <em>empty</em> according to our definition. In particular we say that <code>0</code> is the identity element with respect to the addition operation.</p>
-<hr />
-<p>What about the empty array, or the empty string? We’ll kill two birds with one stone. Define the operation <code>concat</code>, such that <code>concat(&quot;foo&quot;, &quot;bar&quot;) = &quot;foobar&quot;</code>, and <code>concat([1,2,3], [4,5]) = [1,2,3,4,5]</code>. Then</p>
-<div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="at">concat</span>(<span class="st">&quot;&quot;</span><span class="op">,</span> x) <span class="op">=</span> x
-<span class="at">concat</span>(x<span class="op">,</span> <span class="st">&quot;&quot;</span>) <span class="op">=</span> x</code></pre></div>
-</div>
-<p>and</p>
-<div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="at">concat</span>([]<span class="op">,</span> x) <span class="op">=</span> x
-<span class="at">concat</span>(x<span class="op">,</span> []) <span class="op">=</span> x</code></pre></div>
-</div>
-<p>The empty array, and the empty string, are identity elements with respect to their concatenation operations, and so their emptiness can be formally described.</p>
-<p>In general we say that for a set <code>A</code> with a closed binary operation ⊕, an empty (identity) element <code>e</code> is an element in <code>A</code> such that for all <code>x</code> in <code>A</code> we have</p>
-<div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">x ⊕ e <span class="op">=</span> x
-e ⊕ x <span class="op">=</span> x</code></pre></div>
-</div>
-<h2 id="additional-examples">Additional Examples</h2>
-<p>We could go on all day finding examples of identity elements, they are quite common, and there are plenty hiding in the wild. Let’s look at couple more.</p>
-<p>First, let’s continue in the domain of numbers. We’ll take another special value: infinity, or <code>∞</code>. Infinity might seems like the opposite of “empty”, but it will turn out to be an example of an identity element. How exactly can we say that infinity is an empty element of the numbers?</p>
-<p>To understand this, think of upper bounds. Let’s say I make the statement, <em>“The oldest person in the room is at most 80 years old”</em>. This means I claim to have some information about how old the people in the room are. But what if I had absolutely no clue? One way to express this could be saying <em>“The oldest person in the room is at most ∞ years old”</em>.</p>
-<p>Infinity, seen as an <em>upper bound</em>, conveys no information, and is thus in this sense empty. What operation should we choose to express this notion? The answer is to use the <code>min</code> operator.</p>
-<div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="at">min</span>(∞<span class="op">,</span> x) <span class="op">=</span> x<span class="op">;</span>
-<span class="at">min</span>(x<span class="op">,</span> ∞) <span class="op">=</span> x<span class="op">;</span></code></pre></div>
-</div>
-<p>If you wish, try to make a similar argument for negative infinity, and choose a suitable operation to prove it’s “emptiness”.</p>
-<p>Note that this means that for a given domain, multiple empty objects may exist, with different choices of operators to give meaning to a specific sense of emptiness. Another value we can choose is <code>1</code> with the operation <code>mul</code>, such that <code>mul(5,3) = 15</code>.</p>
-<div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="at">mul</span>(<span class="dv">1</span><span class="op">,</span> x) <span class="op">=</span> x<span class="op">;</span>
-<span class="at">mul</span>(x<span class="op">,</span> <span class="dv">1</span>) <span class="op">=</span> x<span class="op">;</span></code></pre></div>
-</div>
-<p>This interpretation of emptiness is combinatorial in nature.</p>
-<hr />
-<p>Another important example is the <em>identity function</em>, <code>(x =&gt; x)</code>, or <code>id</code> as it’s often called. The identity function is the function that takes an input and returns it unchanged. That is <code>id(3) = 3</code>, or generally, <code>id(x) = x</code></p>
-<p>What operation could we choose to see that this is an identity element? The operators we’re interested in are usually some natural way of composing two elements, so the answer of course, is to choose function composition: <code>(f, g) =&gt; x =&gt; f(g(x))</code>, or as it is often written, the operator ∘. We then get the equations</p>
-<pre><code>f ∘ id = f
-id ∘ f = f</code></pre>
-<p>This simply states that to process either the input or the output of a function by applying the identity function is a no-op.</p>
-<p>If you ever wondered where the identity function derives its name from, we see it is because it’s an identity element with respect to function composition <code>∘</code>.</p>
-<h2 id="applications">Applications</h2>
-<p>The key to making practical use of the identity element pattern is usually to simply recognize that such an element exists, or on occasion choosing a model so that such an element can be found, for instance using forests over trees.</p>
-<p>Consider the build system <code>gulp</code>, where we can describe a build step to minify our code base, but only in production, in the following manner.</p>
-<div class="sourceCode">
-<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">const</span> optimize <span class="op">=</span> <span class="va">env</span>.<span class="at">production</span>
-    <span class="op">?</span> <span class="at">minify</span>()
-    : <span class="va">util</span>.<span class="at">noop</span>()<span class="op">;</span>
-
-<span class="va">gulp</span>.<span class="at">task</span>(<span class="st">&#39;build&#39;</span><span class="op">,</span> () <span class="op">=&gt;</span> <span class="op">{</span>
-    <span class="cf">return</span> <span class="at">browserify</span>(source).<span class="at">pipe</span>(optimize)<span class="op">;</span>
-<span class="op">}</span>)<span class="op">;</span></code></pre></div>
-</div>
-<p>We describe our optimization step as the stream processor <code>minify</code>, if our environment is configured to production, and to the identity element for the operation <code>pipe</code>, named <code>util.noop</code>, otherwise.</p>
-<p>A no-op might seem like a useless build step, but we can see this code elegantly avoids awkward if-statements in the build task itself, delegating the responsibility of disabling optimizations to the optimization task.</p>
-<p>If we were to design a build system ourselves, adding a no-op might not be an obvious inclusion, but equipped with understanding of the identity element pattern we can more easily identify its value.</p>
-</div>
-<div id="footer">
-<div>
-Site proudly generated by <a href="http://jaspervdj.be/hakyll">Hakyll</a>
-</div>
-<a href="http://philipnilsson.github.io/Badness10k/atom.xml">RSS feed for this page</a>
-</div>
 ]]></summary>
 </entry>
 
