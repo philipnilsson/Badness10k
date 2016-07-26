@@ -10,7 +10,7 @@ Definition
 The **Monoid** pattern is simply the combination of the two patterns
 [Identity Element](2016-06-29-functional-patterns-identity-element.html)
 and [Semigroup](./2016-07-14-functional-patterns-semigroup.html). A
-monoid therefore is a datatype with composition `⊕` and element `e`,
+monoid therefore is a datatype with composition `⊗` and element `e`,
 satisfying
 
 ```
@@ -192,7 +192,7 @@ fold(xs) = fold([] ++ xs) = fold([]) = fold(xs)
 ```
 
 the value `fold([])` must be such that it is an identity element for
-the domain of `fold`, providing further evidence that the concept of a
+the range of `fold`, providing further evidence that the concept of a
 monoid is a natural extension of that of a semigroup when dealing with
 possibly empty lists.
 
@@ -290,7 +290,7 @@ define `map(f)` as the unique monoid morphism from lists to lists
 satisfying
 
 ```
-map(f)([x]) = f(x)
+map(f)([x]) = [f(x)]
 ```
 
 Since any possible behaviour on single element lists can be

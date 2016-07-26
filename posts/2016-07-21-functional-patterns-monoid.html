@@ -29,7 +29,7 @@
 
 <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
 <h2 id="definition">Definition</h2>
-<p>The <strong>Monoid</strong> pattern is simply the combination of the two patterns <a href="2016-06-29-functional-patterns-identity-element.html">Identity Element</a> and <a href="./2016-07-14-functional-patterns-semigroup.html">Semigroup</a>. A monoid therefore is a datatype with composition <code>⊕</code> and element <code>e</code>, satisfying</p>
+<p>The <strong>Monoid</strong> pattern is simply the combination of the two patterns <a href="2016-06-29-functional-patterns-identity-element.html">Identity Element</a> and <a href="./2016-07-14-functional-patterns-semigroup.html">Semigroup</a>. A monoid therefore is a datatype with composition <code>⊗</code> and element <code>e</code>, satisfying</p>
 <pre><code>x ⊗ e = x
 e ⊗ x = x
 x ⊗ (y ⊗ z) = (x ⊗ y) ⊗ z</code></pre>
@@ -109,7 +109,7 @@ sum([1, 2]) + sum([3, 4]) + sum([5, 6])</code></pre>
 <p>Note that the requirement for an identity element arises naturally out of such a law:</p>
 <pre><code>fold(xs) = fold(xs ++ []) = fold(xs) ++ fold([])
 fold(xs) = fold([] ++ xs) = fold([]) = fold(xs)</code></pre>
-<p>the value <code>fold([])</code> must be such that it is an identity element for the domain of <code>fold</code>, providing further evidence that the concept of a monoid is a natural extension of that of a semigroup when dealing with possibly empty lists.</p>
+<p>the value <code>fold([])</code> must be such that it is an identity element for the range of <code>fold</code>, providing further evidence that the concept of a monoid is a natural extension of that of a semigroup when dealing with possibly empty lists.</p>
 <p>The distributive law above is the fundamental property exploited in the map-reduce model, but <code>fold</code>s do <em>not</em> cover all functions that can be solved in this way. To provide a better classification we generalize.</p>
 <h2 id="monoid-morphisms">Monoid morphisms</h2>
 <p>To define the concept of a monoid morphism, we pair the distributive law mentioned above with <code>fold</code>s behaviour on the empty list, which by defintion returns the empty element of the target monoid.</p>
@@ -140,7 +140,7 @@ length([x]) = 1</code></pre>
 <pre><code>map(f)([]) = []
 map(f)(xs ++ ys) = map(f)(xs) ++ map(f)(ys)</code></pre>
 <p><code>map(f)</code> is thus another parallelizable function, that also happen to be a monoid morphism. By our previous discussion, it also possible to define <code>map(f)</code> as the unique monoid morphism from lists to lists satisfying</p>
-<pre><code>map(f)([x]) = f(x)</code></pre>
+<pre><code>map(f)([x]) = [f(x)]</code></pre>
 <p>Since any possible behaviour on single element lists can be expressed by some function <code>f</code>, we see that.</p>
 <p><strong>Theorem</strong> Any monoid morphism from lists can be written on the form</p>
 <pre><code>fold ∘ map(f)</code></pre>
