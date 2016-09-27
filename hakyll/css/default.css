@@ -4,6 +4,9 @@ body{color:black;font-size:20px;margin:0px auto 0px auto;width:800px;font-family
 
 div#header{border-bottom:2px solid black;margin-bottom:30px;padding:12px 0px 12px 0px}
 
+a {
+    text-decoration: none !important;
+}
 div#logo a{color:black;float:left;font-size:150%;font-weight:bold;text-decoration:none}
 div#header #navigation{text-align:right}
 div#header #navigation a{color:black;font-size:120%;font-weight:bold;margin-left:12px;text-decoration:none;text-transform:uppercase}
