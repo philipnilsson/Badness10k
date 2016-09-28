@@ -23,7 +23,7 @@ understand parallelism in the Map-Reduce style programming
 model. We'll continue by looking at applications in the related notion
 of *Divide & Conquer* style problem solving.
 
-To re-iterate, monoid morphisms are structure-preserving maps between
+To reiterate, monoid morphisms are structure-preserving maps between
 [monoids](./2016-07-21-functional-patterns-monoid.html). That is for
 two monoids $(M, \oplus, e)$ and $(N, \otimes, f)$ a monoid morphism $h$
 is a function satisfying
@@ -143,7 +143,7 @@ Again, this problem can be solved through a divide & conquer style
 of problem solving using monoid morphisms.
 
 There is a monoid morphism from numbers with multiplication, to the
-[pointwise lifted](http://localhost:8000/posts/2016-07-21-functional-patterns-monoid.html)
+[pointwise lifted](./2016-07-21-functional-patterns-monoid.html)
 monoid of numbers with addition.
 
 The fact that such a morphism exists is known as the Fundamental
@@ -171,7 +171,7 @@ $100!$.
 \\]
 
 From this result it is easy to find the number of zeroes in $100!$. We
-simply take the max of the prime frequency of 2 and 5. Since finding
+simply take the min prime frequency for numbers 2 and 5. Since finding
 the prime factorizations up to $100$ is quickly done, this again
 describes an optimization.
 
@@ -181,9 +181,9 @@ formulate this simplification in the language of monoid morphisms we
 would need to introduce equivalence classes, and their interactions
 with monoid structure, which we will not do or explain here.
 
-We note that any partitioning of a set over an equvalence
+Instead we note that any partitioning of a set over an equvalence
 relation induces a monoid morphism to the set of partitions as long as
-the composition respects the equivalence. We challenge the interested
+the composition respects the equivalence and challenge the interested
 reader to find out more.
 
 De Morgan's Laws

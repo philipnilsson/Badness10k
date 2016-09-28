@@ -32,7 +32,7 @@
 <p>\[ \newcommand\emptyList{\texttt{[]}} \newcommand\doubleplus{\kern0.8ex\texttt{++}\kern0.8ex} \newcommand\composition{\kern0.8ex\texttt{&lt;&gt;}\kern0.8ex} \newcommand\doubleplusop{\kern0.8ex\texttt{++}_{op}\kern0.8ex} \]</p>
 <h2 id="introduction">Introduction</h2>
 <p>In this instalment we’ll take a further look at <strong>Monoid morphisms</strong> to try to cement our understanding of this concept. We’ve used monoids to understand parallelism in the Map-Reduce style programming model. We’ll continue by looking at applications in the related notion of <em>Divide &amp; Conquer</em> style problem solving.</p>
-<p>To re-iterate, monoid morphisms are structure-preserving maps between <a href="./2016-07-21-functional-patterns-monoid.html">monoids</a>. That is for two monoids <span class="math inline">(<em>M</em>, ⊕, <em>e</em>)</span> and <span class="math inline">(<em>N</em>, ⊗, <em>f</em>)</span> a monoid morphism <span class="math inline"><em>h</em></span> is a function satisfying</p>
+<p>To reiterate, monoid morphisms are structure-preserving maps between <a href="./2016-07-21-functional-patterns-monoid.html">monoids</a>. That is for two monoids <span class="math inline">(<em>M</em>, ⊕, <em>e</em>)</span> and <span class="math inline">(<em>N</em>, ⊗, <em>f</em>)</span> a monoid morphism <span class="math inline"><em>h</em></span> is a function satisfying</p>
 <p>\[ \begin{aligned} h(e) &amp; = f\\ h(a \oplus b) &amp; = h(a) \otimes h(b) \end{aligned} \]</p>
 <p>so a monoid morphism preserves identity and composition.</p>
 <h2 id="divide-conquer">Divide &amp; Conquer</h2>
@@ -63,15 +63,15 @@
 <h2 id="counting-zeroes">Counting zeroes</h2>
 <p>In interview question I came across ask one to find the number of trailing zeroes in a large factorial, let’s say <span class="math inline">100!</span>, without calculating this actual value, as it is very large.</p>
 <p>Again, this problem can be solved through a divide &amp; conquer style of problem solving using monoid morphisms.</p>
-<p>There is a monoid morphism from numbers with multiplication, to the <a href="http://localhost:8000/posts/2016-07-21-functional-patterns-monoid.html">pointwise lifted</a> monoid of numbers with addition.</p>
+<p>There is a monoid morphism from numbers with multiplication, to the <a href="./2016-07-21-functional-patterns-monoid.html">pointwise lifted</a> monoid of numbers with addition.</p>
 <p>The fact that such a morphism exists is known as the Fundamental Theorem of Arithmetic, that is, we can map a number to its prime factorization.</p>
 <p>\[ primes(1) = \emptyset\\ primes(a * b) = primes(a) \cup_+ primes(b) \]</p>
 <p>Here <span class="math inline">∪<sub>+</sub></span> denotes pointwise addition in the set of prime frequencies.</p>
 <p>By applying this monoid morphism, we can find the prime factorization of <span class="math inline">100!</span>.</p>
 <p>\[ \begin{aligned} &amp; primes(100!) \\ = \enspace &amp; primes(100 * 99!) \\ = \enspace &amp; primes(100) \cup_+ primes(99!) \\ = \enspace &amp; primes(100) \cup_+ primes(99) \cup_+ \ldots \cup_+ primes(2) \end{aligned} \]</p>
-<p>From this result it is easy to find the number of zeroes in <span class="math inline">100!</span>. We simply take the max of the prime frequency of 2 and 5. Since finding the prime factorizations up to <span class="math inline">100</span> is quickly done, this again describes an optimization.</p>
+<p>From this result it is easy to find the number of zeroes in <span class="math inline">100!</span>. We simply take the min prime frequency for numbers 2 and 5. Since finding the prime factorizations up to <span class="math inline">100</span> is quickly done, this again describes an optimization.</p>
 <p>One might note that we can in fact solve this problem even faster, by simply counting the prime frequencies for 2 and 5 <em>only</em>. In order to formulate this simplification in the language of monoid morphisms we would need to introduce equivalence classes, and their interactions with monoid structure, which we will not do or explain here.</p>
-<p>We note that any partitioning of a set over an equvalence relation induces a monoid morphism to the set of partitions as long as the composition respects the equivalence. We challenge the interested reader to find out more.</p>
+<p>Instead we note that any partitioning of a set over an equvalence relation induces a monoid morphism to the set of partitions as long as the composition respects the equivalence and challenge the interested reader to find out more.</p>
 <h2 id="de-morgans-laws">De Morgan’s Laws</h2>
 <p>\[ \newcommand\andand{\kern0.8ex\texttt{&amp;&amp;}\kern0.8ex} \newcommand\oror{\kern0.8ex\texttt{||}\kern0.8ex} \]</p>
 <p>The negation function <span class="math inline"><code>!</code></span> which negates a boolean proposition is a monoid morphism from <span class="math inline">(<em>B</em><em>o</em><em>o</em><em>l</em>, <code>&amp;&amp;</code>, <code>true</code>)</span> to <span class="math inline">(<em>B</em><em>o</em><em>o</em><em>l</em>, <code>||</code>, <code>false</code>)</span>.</p>
