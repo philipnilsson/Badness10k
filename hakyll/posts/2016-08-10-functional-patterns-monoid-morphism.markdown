@@ -7,12 +7,14 @@ title: Algebraic Patterns - Monoid morphisms
 </script>
 
 
+<div style="display: none">
 \\[
 \\newcommand\\emptyList{\\texttt{[]}}
 \\newcommand\\doubleplus{\\kern0.8ex\\texttt{++}\\kern0.8ex}
 \\newcommand\\composition{\\kern0.8ex\\texttt{<>}\\kern0.8ex}
 \\newcommand\\doubleplusop{\\kern0.8ex\\texttt{++}_{op}\\kern0.8ex}
 \\]
+</div>
 
 Introduction
 ------------
