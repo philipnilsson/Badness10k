@@ -1,5 +1,5 @@
 ---
-title: Algebraic Patterns - Monoid morphisms
+title: Algebraic patterns - Monoid morphisms
 ---
 
 <script type="text/javascript" async
