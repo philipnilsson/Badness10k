@@ -62,7 +62,7 @@ If we let \\(h_i\\) be the height of index \\(i\\), and let
 \\(i\\), and similarly define \\(high_i^{right}\\) we can express this
 as.
 
-> A sqaure of height \\(h_i\\), is filled when
+> A square of height \\(h_i\\), is filled when
 > \\[ h_i \\leq high_i^{left} \land h_i \leq high_i^{right} \\]
 
 We can simplify the conjunction by expressing this via \\(min\\)
