@@ -155,6 +155,8 @@ print(d)</code></pre>
 <p>The State Monad provides purely functional state without references, allowing for many useful higher-order operations on state, such as easily serializing the state or implementing functions such as <code>excursion</code>. <a href="https://gist.github.com/philipnilsson/f06f052fbea28a4f7e6b3cd3f8a07377"></a>, similar to what be accomplished in principled state management libraries such as Redux.</p>
 <p>The <code>ST</code> Monad provides more performant state with references, at the cost of some higher order behaviour.</p>
 <p>Both the State and ST monads bound the lifetime of a stateful computation, ensuring that programs remain easily reasoned about in the general case.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>Monads can help solve certain classes of problems in a uniform way. We’ve had a look at this from a syntactic perspective. Rather than complicating language designs and grammars with additional features, we embed these problems in a Monadic framework, resulting in more economic notation, that, in addition to the problems mentioned above, can be adapated to additional situations.</p>
 <div id="fn1">
 [1] <em><small> Javascript promises are continuations tracking a list of its subscribers and caching its internal async value, which helps embed them more predictable within an imperative host language. This can typically be omitted in a monadic setting.</small></em>
 </div>

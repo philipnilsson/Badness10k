@@ -277,6 +277,18 @@ Both the State and ST monads bound the lifetime of a stateful
 computation, ensuring that programs remain easily reasoned about in
 the general case.
 
+Conclusion
+==========
+
+Monads can help solve certain classes of problems in a uniform
+way. We've had a look at this from a syntactic perspective. Rather
+than complicating language designs and grammars with additional
+features, we embed these problems in a Monadic framework, resulting in
+more economic notation, that, in addition to the problems mentioned
+above, can be adapated to additional situations.
+
+
+
 <div id="fn1"> [1] <em><small> Javascript promises are continuations
 tracking a list of its subscribers and caching its internal async
 value, which helps embed them more predictable within an imperative
