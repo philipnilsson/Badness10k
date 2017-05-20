@@ -21,7 +21,7 @@ sequence.
 Such functions tend lead to deeply nested and hard to read code with
 excessive syntactic clutter, obscuring our actual intentions.
 
-```javascript
+``` javascript
 var a = getData();
 if (a != null) {
   var b = getMoreData(a);
@@ -45,7 +45,7 @@ helping to deal with such issues.  Unfortunately this syntax is
 needlessly complected with object-oriented-style record and method
 access.
 
-```javascript
+``` javascript
 var a = getData();
 var b = a?.getMoreData();
 var c = b?.getMoreData();
@@ -63,7 +63,7 @@ functions using
 making use of the fact that `Maybe`/`Option` are Monadic.
 
 
-```haskell
+``` haskell
 do
   a <- getData
   b <- getMoreData a
@@ -79,7 +79,7 @@ For-loop Hell occurs when iteration through multiple dependent data
 sets is needed. Just as for null-checking, our code becomes deeply
 nested, with a lot of syntactic clutter and needless bookkeeping.
 
-```javascript
+``` javascript
 var a = getData();
 for (var a_i in a) {
   var b = getMoreData(a_i);
@@ -103,7 +103,7 @@ specialized syntactic construction called list-comprehensions, sharing
 a lot of similarities with `SQL`.
 
 
-```javascript
+``` python
 [
   print(d)
   for a in getData()

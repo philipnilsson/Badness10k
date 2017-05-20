@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Badness 10.000 - Escaping Hell with Monads</title>
         <link rel="stylesheet" href="../css/default.css" />
+        <link rel="stylesheet" href="../css/pandoc.css" />
     </head>
     <body>
         <div id="header">
@@ -74,12 +75,12 @@
 <span class="op">}</span></code></pre></div>
 <h2 id="ad-hoc-solution-list-comprehensions">Ad hoc solution: List comprehensions</h2>
 <p>A more elegant solution to the problem is found by introducing a specialized syntactic construction called list-comprehensions, sharing a lot of similarities with <code>SQL</code>.</p>
-<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">[
-  <span class="at">print</span>(d)
-  <span class="cf">for</span> a <span class="kw">in</span> <span class="at">getData</span>()
-  <span class="cf">for</span> b <span class="kw">in</span> <span class="at">getMoreData</span>(a)
-  <span class="cf">for</span> c <span class="kw">in</span> <span class="at">getMoreData</span>(b)
-  <span class="cf">for</span> d <span class="kw">in</span> <span class="at">getEvenMoreData</span>(a<span class="op">,</span> c)
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">[
+  <span class="bu">print</span>(d)
+  <span class="cf">for</span> a <span class="kw">in</span> getData()
+  <span class="cf">for</span> b <span class="kw">in</span> getMoreData(a)
+  <span class="cf">for</span> c <span class="kw">in</span> getMoreData(b)
+  <span class="cf">for</span> d <span class="kw">in</span> getEvenMoreData(a, c)
 ]</code></pre></div>
 <h2 id="list-monad">List Monad</h2>
 <p>We note that lists are Monads. By reusing <code>do</code>-notation we can write an equally elegant solution to our problem without introducing additional notation.</p>
