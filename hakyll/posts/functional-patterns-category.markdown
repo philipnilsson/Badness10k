@@ -1,5 +1,5 @@
 ---
-title: Algebraic patterns - Category
+title: Algebraic patterns — Category
 date: 2016-11-04
 ---
 

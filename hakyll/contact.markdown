@@ -2,9 +2,5 @@
 title: Contact
 ---
 
-I\'m a Swedish programmer, consultant and entrepreneur. My main
-interests are in using functional programming to build high quality
-software solutions.
-
-
-You can reach me at `alipang` at `gmail.com`, or follow me on [Twitter](http://twitter.com/ali_pang).
+I live in a small hut in the mountains of Kumano Kodō on Kii Hantō and would not
+like to be contacted.

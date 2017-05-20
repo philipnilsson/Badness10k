@@ -1,5 +1,5 @@
 ---
-title: Algebraic patterns - Identity element
+title: Algebraic patterns — Identity element
 ---
 
 Introduction
