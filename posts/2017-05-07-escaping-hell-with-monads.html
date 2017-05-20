@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Badness 10.000 - Escaping Hell with Monads</title>
+        <link rel="stylesheet" href="../css/default.css" />
+    </head>
+    <body>
+        <div id="header">
+            <div id="logo">
+                <a href="../">Badness 10.000</a>
+                <a class="twitter-bird" href="//www.twitter.com/ali_pang">
+                  <img src="https://g.twimg.com/dev/documentation/image/Twitter_logo_blue_48.png">
+                </a>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>Escaping Hell with Monads</h1>
+            <div class="info">
+    Posted on May  7, 2017
+    
+</div>
+
+<p>As programmers we occasionally find ourselves in “Programmer’s Hell”, where our regular abstractions fail to satisfactory solve certain recurrent problems.</p>
+<p>In this post we’ll have a look at some instances of such sitations, their “ad hoc” solutions provided at the language level, and finally at how these problems can be solved in a uniform way using Monads. (Call you language implementor and ask for <code>do</code>-notation today!)</p>
+<h1 id="null-checking-hell">Null-checking Hell</h1>
+<p>Null-checking Hell typically occurs when several partial functions, i.e. functions that may not return a real value, need to be run in sequence.</p>
+<p>Such functions tend lead to deeply nested and hard to read code with excessive syntactic clutter, obscuring our actual intentions.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> a <span class="op">=</span> <span class="at">getData</span>()<span class="op">;</span>
+<span class="cf">if</span> (a <span class="op">!=</span> <span class="kw">null</span>) <span class="op">{</span>
+  <span class="kw">var</span> b <span class="op">=</span> <span class="at">getMoreData</span>(a)<span class="op">;</span>
+  <span class="cf">if</span> (b <span class="op">!=</span> <span class="kw">null</span>) <span class="op">{</span>
+     <span class="kw">var</span> c <span class="op">=</span> <span class="at">getMoreData</span>(b)<span class="op">;</span>
+     <span class="cf">if</span> (c <span class="op">!=</span> <span class="kw">null</span>) <span class="op">{</span>
+        <span class="kw">var</span> d <span class="op">=</span> <span class="at">getEvenMoreData</span>(a<span class="op">,</span> c)
+        <span class="cf">if</span> (d <span class="op">!=</span> <span class="kw">null</span>) <span class="op">{</span>
+          <span class="at">print</span>(d)<span class="op">;</span>
+        <span class="op">}</span>
+     <span class="op">}</span>
+  <span class="op">}</span>
+<span class="op">}</span></code></pre></div>
+<h2 id="ad-hoc-solution-elvis-operators">Ad hoc solution: Elvis operators</h2>
+<p>Elvis operators introduce a specialized syntax for partial navigation, helping to deal with such issues. Unfortunately this syntax is needlessly complected with object-oriented-style record and method access.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> a <span class="op">=</span> <span class="at">getData</span>()<span class="op">;</span>
+<span class="kw">var</span> b <span class="op">=</span> a<span class="op">?</span>.<span class="at">getMoreData</span>()<span class="op">;</span>
+<span class="kw">var</span> c <span class="op">=</span> b<span class="op">?</span>.<span class="at">getMoreData</span>()<span class="op">;</span>
+<span class="kw">var</span> d <span class="op">=</span> c<span class="op">?</span>.<span class="at">getEvenMoreData</span>(a)<span class="op">;</span>
+<span class="at">print</span>(d)<span class="op">;</span></code></pre></div>
+<h2 id="maybe-monad">Maybe Monad</h2>
+<p>By letting our simple functions explicitly return values of the <code>Maybe</code> (sometimes <code>Option</code>) type, we can chain together such functions using <a href="https://en.wikibooks.org/wiki/Haskell/do_notation"><code>do</code>-notation</a>, making use of the fact that <code>Maybe</code>/<code>Option</code> are Monadic.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">do</span>
+  a <span class="ot">&lt;-</span> getData
+  b <span class="ot">&lt;-</span> getMoreData a
+  c <span class="ot">&lt;-</span> getMoreData b
+  d <span class="ot">&lt;-</span> getEvenMoreData a c
+  print d</code></pre></div>
+<h1 id="for-loop-hell">For-loop Hell</h1>
+<p>For-loop Hell occurs when iteration through multiple dependent data sets is needed. Just as for null-checking, our code becomes deeply nested, with a lot of syntactic clutter and needless bookkeeping.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> a <span class="op">=</span> <span class="at">getData</span>()<span class="op">;</span>
+<span class="cf">for</span> (<span class="kw">var</span> a_i <span class="kw">in</span> a) <span class="op">{</span>
+  <span class="kw">var</span> b <span class="op">=</span> <span class="at">getMoreData</span>(a_i)<span class="op">;</span>
+  <span class="cf">for</span> (<span class="kw">var</span> b_j <span class="kw">in</span> b) <span class="op">{</span>
+    <span class="kw">var</span> c <span class="op">=</span> <span class="at">getMoreData</span>(b_j)<span class="op">;</span>
+    <span class="cf">for</span> (<span class="kw">var</span> c_k <span class="kw">in</span> c) <span class="op">{</span>
+      <span class="kw">var</span> d <span class="op">=</span> <span class="at">getMoreData</span>(c_k)<span class="op">;</span>
+      <span class="cf">for</span> (<span class="kw">var</span> d_l <span class="kw">in</span> d) <span class="op">{</span>
+        <span class="at">print</span>(d_l)<span class="op">;</span>
+      <span class="op">}</span>
+    <span class="op">}</span>
+  <span class="op">}</span>
+<span class="op">}</span></code></pre></div>
+<h2 id="ad-hoc-solution-list-comprehensions">Ad hoc solution: List comprehensions</h2>
+<p>A more elegant solution to the problem is found by introducing a specialized syntactic construction called list-comprehensions, sharing a lot of similarities with <code>SQL</code>.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">[
+  <span class="at">print</span>(d)
+  <span class="cf">for</span> a <span class="kw">in</span> <span class="at">getData</span>()
+  <span class="cf">for</span> b <span class="kw">in</span> <span class="at">getMoreData</span>(a)
+  <span class="cf">for</span> c <span class="kw">in</span> <span class="at">getMoreData</span>(b)
+  <span class="cf">for</span> d <span class="kw">in</span> <span class="at">getEvenMoreData</span>(a<span class="op">,</span> c)
+]</code></pre></div>
+<h2 id="list-monad">List Monad</h2>
+<p>We note that lists are Monads. By reusing <code>do</code>-notation we can write an equally elegant solution to our problem without introducing additional notation.</p>
+<p>List comprehensions often include syntax for filtering, which can be added also to our case by using simple functions such as <a href="https://hackage.haskell.org/package/base-4.9.1.0/docs/Control-Monad.html#v:guard"><code>guard</code></a>.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">do</span>
+  a <span class="ot">&lt;-</span> getData
+  b <span class="ot">&lt;-</span> getMoreData a
+  c <span class="ot">&lt;-</span> getMoreData b
+  d <span class="ot">&lt;-</span> getEvenMoreData a c
+  print d</code></pre></div>
+<h1 id="callback-hell">Callback Hell</h1>
+<p>The most famous and perhaps most painful circle of coding inferno is Callback Hell, where the inversion of control needed to implement asynchronous control leads to deeply nested code and excessive syntactic clutter, difficult to follow error handling and a host of other ailments.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="at">getData</span>(a <span class="op">=&gt;</span>
+  <span class="at">getMoreData</span>(a<span class="op">,</span> b <span class="op">=&gt;</span>
+    <span class="at">getMoreData</span>(b<span class="op">,</span> c <span class="op">=&gt;</span>
+      <span class="at">getEvenMoreData</span>(a<span class="op">,</span> c<span class="op">,</span> d <span class="op">=&gt;</span>
+        <span class="at">print</span>(d)<span class="op">,</span>
+        err <span class="op">=&gt;</span> <span class="at">onErrorD</span>(err)
+      )
+      err <span class="op">=&gt;</span> <span class="at">onErrorC</span>(err)
+    )<span class="op">,</span>
+    err <span class="op">=&gt;</span> <span class="at">onErrorB</span>(err)
+  )<span class="op">,</span>
+  err <span class="op">=&gt;</span> <span class="at">onErrorA</span>(err)
+)</code></pre></div>
+<h2 id="ad-hoc-solution-asyncawait">Ad hoc solution: Async/await</h2>
+<p>In order to overcome such difficulties, another kind of specialized syntax is introduced, called <code>async/await</code> can be introduced. Such notation typically delegates error handling to existing <code>try/catch</code> syntax, which can sometimes feel like a hell on it’s own.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">async <span class="kw">function</span>() <span class="op">{</span>
+  <span class="kw">var</span> a <span class="op">=</span> await getData
+  <span class="kw">var</span> b <span class="op">=</span> await <span class="at">getMoreData</span>(a)
+  <span class="kw">var</span> c <span class="op">=</span> await <span class="at">getMoreData</span>(b)
+  <span class="kw">var</span> d <span class="op">=</span> await <span class="at">getEvenMoreData</span>(a<span class="op">,</span> c)
+  <span class="at">print</span>(d)
+<span class="op">}</span></code></pre></div>
+<h2 id="ad-hoc-solution-promises">Ad hoc solution: Promises</h2>
+<p>Another possible solution is to use Promises (also Futures/Tasks). While problems with nesting are alleviated, using the result of a Promise in multiple places forces us to manually introduce a lexical scope where such a value can be passed around. This leads to one level of nesting per variable that is used in multiple positions.</p>
+<p>Using promises directly using <code>.then</code>-syntax is also often not quite as clean or clear as using <code>async/await</code> notation.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="at">getData</span>().<span class="at">then</span>(a <span class="op">=&gt;</span> <span class="at">getMoreData</span>(a)
+  .<span class="at">then</span>(b <span class="op">=&gt;</span> <span class="at">getMoreData</span>(b))
+  .<span class="at">then</span>(c <span class="op">=&gt;</span> <span class="at">getEvenMoreData</span>(a<span class="op">,</span> c))
+  .<span class="at">then</span>(d <span class="op">=&gt;</span> <span class="at">print</span>(d)
+)<span class="op">;</span></code></pre></div>
+<h2 id="continuation-monad">Continuation Monad</h2>
+<p>At this point it shouldn’t be surprising that we can solve this problem in exactly the same way as the two situations previously encountered by noting that Promises form Monads. In this context, we often use the word Continuation in place of the above mentioned names. <a href="#fn1">[1]</a></p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">do</span>
+  a <span class="ot">&lt;-</span> getData
+  b <span class="ot">&lt;-</span> getMoreData a
+  c <span class="ot">&lt;-</span> getMoreData b
+  d <span class="ot">&lt;-</span> getEvenMoreData a c
+  print d</code></pre></div>
+<h1 id="state-passing-hell">State-passing Hell</h1>
+<p>The purely functional world is not without it’s problems, even when side-effects are not a concern. When writing certain kinds of purely functional code, excessive parameter passing between functions can become an issue.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">let</span>
+  (a, st1) <span class="fu">=</span> getData initalState
+  (b, st2) <span class="fu">=</span> getMoreData (a, st1)
+  (c, st3) <span class="fu">=</span> getMoreData (b, st2)
+  (d, st4) <span class="fu">=</span> getEvenMoreData (a, c, st3)
+<span class="kw">in</span> print(d)</code></pre></div>
+<h2 id="ad-hoc-solution-imperative-language">Ad hoc solution: Imperative language</h2>
+<p>We can solve such problems by introducing implicit state that let functions communicate information between without having to pass all dependent values as explicit parameters. Unfortunately by using an imperative model by default severely complicates reasoning about code. Lifetime and size of state typically has no static bounds.</p>
+<pre><code>a = getData();
+b = getMoreData(a);
+c = getMoreData(b);
+d = getEvenMoreData(a, c);
+print(d)</code></pre>
+<h2 id="state-monad">State Monad</h2>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">do</span>
+  a <span class="ot">&lt;-</span> getData
+  b <span class="ot">&lt;-</span> getMoreData a
+  c <span class="ot">&lt;-</span> getMoreData b
+  d <span class="ot">&lt;-</span> getEvenMoreData a c
+  print d</code></pre></div>
+<p>The State Monad provides purely functional state without references, allowing for many useful higher-order operations on state, such as easily serializing the state or implementing functions such as <code>excursion</code>. <a href="https://gist.github.com/philipnilsson/f06f052fbea28a4f7e6b3cd3f8a07377"></a>, similar to what be accomplished in principled state management libraries such as Redux.</p>
+<p>The <code>ST</code> Monad provides more performant state with references, at the cost of some higher order behaviour.</p>
+<p>Both the State and ST monads bound the lifetime of a stateful computation, ensuring that programs remain easily reasoned about in the general case.</p>
+<div id="fn1">
+[1] <em><small> Javascript promises are continuations tracking a list of its subscribers and caching its internal async value, which helps embed them more predictable within an imperative host language. This can typically be omitted in a monadic setting.</small></em>
+</div>
+
+        </div>
+
+        <div id="footer">
+          <a href="https://twitter.com/ali_pang" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @ali_pang</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+          <div>
+            <a type="application/rss+xml" href="http://philipnilsson.github.io/Badness10k/atom.xml">RSS feed for this page</a>
+          </div>
+        </div>
+
+        <div id="disqus_thread"></div>
+        <script>
+
+          var disqus_config = function () {
+            this.page.url = 'https://philipnilsson.github.io/Badness10k/posts/2017-05-07-escaping-hell-with-monads.html';
+            this.page.identifier = 'Escaping Hell with Monads';
+          };
+
+          (function() { // DON'T EDIT BELOW THIS LINE
+          var d = document, s = d.createElement('script');
+          s.src = 'https://badness-10-000.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    </body>
+</html>

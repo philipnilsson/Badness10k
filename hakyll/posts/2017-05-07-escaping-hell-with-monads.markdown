@@ -6,7 +6,7 @@ As programmers we occasionally find ourselves in "Programmer's Hell",
 where our regular abstractions fail to satisfactory solve certain
 recurrent problems.
 
-In this post we'll have a look at some instances of Programmer's Hell,
+In this post we'll have a look at some instances of such sitations,
 their "ad hoc" solutions provided at the language level, and finally
 at how these problems can be solved in a uniform way using Monads. (Call
 you language implementor and ask for `do`-notation today!)
