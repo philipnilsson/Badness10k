@@ -26,10 +26,10 @@
 </div>
 
 <p>As programmers we occasionally find ourselves in “Programmer’s Hell”, where our regular abstractions fail to satisfactory solve certain recurrent problems.</p>
-<p>In this post we’ll have a look at some instances of such sitations, their “ad hoc” solutions provided at the language level, and finally at how these problems can be solved in a uniform way using Monads. (Call you language implementor and ask for <code>do</code>-notation today!)</p>
+<p>In this post we’ll have a look at some instances of such situations, their “ad hoc” solutions provided at the language level, and finally at how these problems can be solved in a uniform way using Monads. (Call your language implementor and ask for <code>do</code>-notation today!)</p>
 <h1 id="null-checking-hell">Null-checking Hell</h1>
 <p>Null-checking Hell typically occurs when several partial functions, i.e. functions that may not return a real value, need to be run in sequence.</p>
-<p>Such functions tend lead to deeply nested and hard to read code with excessive syntactic clutter, obscuring our actual intentions.</p>
+<p>Such functions tend to lead to deeply nested and hard to read code with excessive syntactic clutter, obscuring our actual intentions.</p>
 <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">var</span> a <span class="op">=</span> <span class="at">getData</span>()<span class="op">;</span>
 <span class="cf">if</span> (a <span class="op">!=</span> <span class="kw">null</span>) <span class="op">{</span>
   <span class="kw">var</span> b <span class="op">=</span> <span class="at">getMoreData</span>(a)<span class="op">;</span>
