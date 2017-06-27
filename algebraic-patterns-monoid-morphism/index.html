@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+ <html lang="en"><head><script type="text/javascript" async="" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script><script async="" src="//platform.twitter.com/widgets.js"></script><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title data-react-helmet="true">Badness 10.0000 | Algebraic patterns — Monoid morphisms</title><style id="typography.js">html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block}audio:not([controls]){display:none;height:0}progress{vertical-align:baseline}[hidden],template{display:none}a{background-color:transparent;-webkit-text-decoration-skip:objects}a:active,a:hover{outline-width:0}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:inherit;font-weight:bolder}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background-color:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}svg:not(:root){overflow:hidden}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}figure{margin:1em 40px}hr{box-sizing:content-box;height:0;overflow:visible}button,input,optgroup,select,textarea{font:inherit;margin:0}optgroup{font-weight:700}button,input{overflow:visible}button,select{text-transform:none}[type=reset],[type=submit],button,html [type=button]{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-cancel-button,[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-input-placeholder{color:inherit;opacity:.54}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}html{font:125%/1.65em Alegreya,serif;box-sizing:border-box;overflow-y:scroll;}*{box-sizing:inherit;}*:before{box-sizing:inherit;}*:after{box-sizing:inherit;}body{color:hsla(0,0%,0%,0.8);font-family:Alegreya,serif;font-weight:normal;word-wrap:break-word;font-kerning:normal;-moz-font-feature-settings:"kern", "liga", "clig", "calt";-ms-font-feature-settings:"kern", "liga", "clig", "calt";-webkit-font-feature-settings:"kern", "liga", "clig", "calt";font-feature-settings:"kern", "liga", "clig", "calt";}img{max-width:100%;margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}h1{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;color:inherit;font-family:Patua One,serif;font-weight:bold;text-rendering:optimizeLegibility;font-size:2.25rem;line-height:2.475rem;}h2{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;color:inherit;font-family:Patua One,serif;font-weight:bold;text-rendering:optimizeLegibility;font-size:1.62671rem;line-height:2.475rem;}h3{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;color:inherit;font-family:Patua One,serif;font-weight:bold;text-rendering:optimizeLegibility;font-size:1.38316rem;line-height:1.65rem;}h4{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;color:inherit;font-family:Patua One,serif;font-weight:bold;text-rendering:optimizeLegibility;font-size:1rem;line-height:1.65rem;}h5{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;color:inherit;font-family:Patua One,serif;font-weight:bold;text-rendering:optimizeLegibility;font-size:0.85028rem;line-height:1.65rem;}h6{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;color:inherit;font-family:Patua One,serif;font-weight:bold;text-rendering:optimizeLegibility;font-size:0.78405rem;line-height:1.65rem;}hgroup{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}ul{margin-left:1.65rem;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;list-style-position:outside;list-style-image:none;}ol{margin-left:1.65rem;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;list-style-position:outside;list-style-image:none;}dl{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}dd{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}p{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}figure{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}pre{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;font-size:0.85rem;line-height:1.42;background:hsla(0,0%,0%,0.04);border-radius:3px;overflow:auto;word-wrap:normal;padding:1.65rem;}table{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;font-size:1rem;line-height:1.65rem;border-collapse:collapse;width:100%;}fieldset{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}blockquote{margin-left:1.65rem;margin-right:1.65rem;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}form{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}noscript{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}iframe{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}hr{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:calc(1.65rem - 1px);background:hsla(0,0%,0%,0.2);border:none;height:1px;}address{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}b{font-weight:bold;}strong{font-weight:bold;}dt{font-weight:bold;}th{font-weight:bold;}li{margin-bottom:calc(1.65rem / 2);}ol li{padding-left:0;}ul li{padding-left:0;}li > ol{margin-left:1.65rem;margin-bottom:calc(1.65rem / 2);margin-top:calc(1.65rem / 2);}li > ul{margin-left:1.65rem;margin-bottom:calc(1.65rem / 2);margin-top:calc(1.65rem / 2);}blockquote *:last-child{margin-bottom:0;}li *:last-child{margin-bottom:0;}p *:last-child{margin-bottom:0;}li > p{margin-bottom:calc(1.65rem / 2);}code{font-size:0.85rem;line-height:1.65rem;}kbd{font-size:0.85rem;line-height:1.65rem;}samp{font-size:0.85rem;line-height:1.65rem;}abbr{border-bottom:1px dotted hsla(0,0%,0%,0.5);cursor:help;}acronym{border-bottom:1px dotted hsla(0,0%,0%,0.5);cursor:help;}abbr[title]{border-bottom:1px dotted hsla(0,0%,0%,0.5);cursor:help;text-decoration:none;}thead{text-align:left;}td,th{text-align:left;border-bottom:1px solid hsla(0,0%,0%,0.12);font-feature-settings:"tnum";-moz-font-feature-settings:"tnum";-ms-font-feature-settings:"tnum";-webkit-font-feature-settings:"tnum";padding-left:1.1rem;padding-right:1.1rem;padding-top:0.825rem;padding-bottom:calc(0.825rem - 1px);}th:first-child,td:first-child{padding-left:0;}th:last-child,td:last-child{padding-right:0;}tt,code{background-color:hsla(0,0%,0%,0.04);border-radius:3px;font-family:"SFMono-Regular", Consolas,"Roboto Mono","Droid Sans Mono","Liberation Mono",Menlo,Courier,monospace;padding:0;padding-top:0.2em;padding-bottom:0.2em;}pre code{background:none;line-height:1.42;}code:before,code:after,tt:before,tt:after{letter-spacing:-0.2em;content:" ";}pre code:before,pre code:after,pre tt:before,pre tt:after{content:"";}</style><link href="//fonts.googleapis.com/css?family=Patua+One:400|Alegreya:400,400i,700" rel="stylesheet" type="text/css"/><style>.warning{color:#9f6000;background-color:#feefb3;padding:18px}.warning:before{content:"\26A0";margin-right:9px}.rfc-page pre{font-family:inherit}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}h1,h2,h3,h4{font-weight:400}.header{text-align:center;padding:4em 0}.header h1{margin-bottom:.3em}.markdown img{max-width:400px;max-width:25rem}.headroom-wrapper h2{margin:0;padding:0;text-transform:uppercase;color:#fff}.headroom-wrapper{height:inherit!important}.figure{text-align:center}#footer{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;padding:1em 0;-webkit-box-align:center;-ms-flex-align:center;align-items:center}#footer a{font-size:80%;padding-bottom:.8em}</style></head><body><div id="react-mount"><div data-reactroot="" data-reactid="1" data-react-checksum="1509878654"><div style="margin-bottom:1.65rem;" class="headroom-wrapper" data-reactid="2"><div style="position:relative;top:0;left:0;right:0;z-index:1;-webkit-transform:translateY(0);-ms-transform:translateY(0);transform:translateY(0);background:#1244ee;" class="headroom headroom--unfixed" data-reactid="3"><div style="max-width:40rem;margin-left:auto;margin-right:auto;padding-top:0;padding:0.825rem 1.2375rem;" data-reactid="4"><a style="color:black;text-decoration:none;" href="/Badness10k/" data-reactid="5"><h2 style="float:left;" data-reactid="6">Badness 10.000</h2><a class="twitter-bird" href="//www.twitter.com/ali_pang" style="float:right;" data-reactid="7"><img src="https://g.twimg.com/dev/documentation/image/Twitter_logo_blue_48.png" style="margin:0px;filter:brightness(4);max-height:2.1rem;" data-reactid="8"/></a></a><span style="display:block;clear:both;" data-reactid="9"> </span></div></div></div><div style="max-width:40rem;margin-left:auto;margin-right:auto;padding:1.65rem 1.2375rem;padding-top:0;" data-reactid="10"><div class="markdown" data-reactid="11"><!-- react-empty: 12 --><div class="header" data-reactid="13"><h1 data-reactid="14">Algebraic patterns — Monoid morphisms</h1><span data-reactid="15"><!-- react-text: 16 -->Posted on <!-- /react-text --><!-- react-text: 17 -->August 10, 2016<!-- /react-text --></span></div><div data-reactid="18"><div style="display: none">
+\[
+\newcommand\emptyList{\texttt{[]}}
+\newcommand\doubleplus{\kern0.8ex\texttt{++}\kern0.8ex}
+\newcommand\composition{\kern0.8ex\texttt{<>}\kern0.8ex}
+\newcommand\doubleplusop{\kern0.8ex\texttt{++}_{op}\kern0.8ex}
+\]
+</div>
+<h2>Introduction</h2>
+<p>In this instalment we’ll take a further look at <strong>Monoid morphisms</strong> to
+try to cement our understanding of this concept. We’ve used monoids to
+understand parallelism in the Map-Reduce style programming
+model. We’ll continue by looking at applications in the related notion
+of <em>Divide &amp; Conquer</em> style problem solving.</p>
+<p>To reiterate, monoid morphisms are structure-preserving maps between
+<a href="./2016-07-21-functional-patterns-monoid.html">monoids</a>. That is for
+two monoids \((M, \oplus, e)\) and \((N, \otimes, f)\) a monoid morphism \(h\)
+is a function satisfying</p>
+<p>\[
+\begin{aligned}
+h(e) &amp; = f\\
+h(a \oplus b) &amp; = h(a) \otimes h(b)
+\end{aligned}
+\]</p>
+<p>so a monoid morphism preserves identity and composition.</p>
+<h2>Divide &amp; Conquer</h2>
+<p>Below we will solve at a set of
+<a href="https://en.wikipedia.org/wiki/Divide_and_conquer">Divide &amp; Conquer</a>
+type problems and show that monoid morphisms often capture the
+divide and conquer steps.</p>
+<p>Wishing to calculate the result of applying a function \(h\), we start
+by “dividing” it’s argument by writing it as a composition in terms of
+\(\oplus\).</p>
+<p>\[ h(a \oplus b) \]</p>
+<p>and by using the monoid morphism law, we rewrite in terms of \(\otimes\)</p>
+<p>\[ h(a) \otimes h(b) \]</p>
+<p>which captures the “conquering” — a re-composition step that
+recombines solved subproblems \(h(a)\) and \(h(b)\) into a full solution.</p>
+<h2>Sorting</h2>
+<p>There is the ordinary monoid of lists, but there is a also different
+monoid of <em>sorted</em> lists. The monoid of sorted lists does not have the
+usual concatenation \(\doubleplus\) as it’s composition, as it does not
+&quot;maintain sortedness&quot;, i.e. \(xs \doubleplus ys\) need not be sorted just because
+\(xs\) and \(ys\) are.</p>
+<p>Instead we’ll use as composition the operation \(\texttt{merge}\) which
+we’ll denote with \(\odot\). It is clearly associative, and has the
+empty list as its identity.</p>
+<p>The function \(sort\) is a monoid morphism from ordinary lists to
+the monoid of sorted lists</p>
+<p>\begin{aligned}
+sort(\emptyList) &amp; = \emptyList\\
+sort(xs \doubleplus ys) &amp; = sort(xs) \odot sort(ys)
+\end{aligned}</p>
+<p>If \(sort\) is an \(n^2\) time sort, such as insertion-sort or bubble-sort,
+this monoid morphism encodes an optimization step. Since merging can
+be done in linear time, and the decomposition \(xs \doubleplus ys\) can be chosen
+to halve the length of the composite list, we can go from \(n^2\) to
+\((2(\frac{n}{2})^2 + n)\) time, which is a significant performance improvement.</p>
+<p>By repeatedly applying this monoid morphism we derive the merge-sort
+algorithm.</p>
+<h2>Exponentiation</h2>
+<p>The function \(exp\) is a monoid morphism from the monoid of numbers
+with addition to the monoid of numbers with multiplication. The
+meaning of this statement is that \(exp\) should satisfy</p>
+<p>\[
+exp(0) = 1\\
+exp(b + c) = exp(b) * exp(c)
+\]</p>
+<p>which we know to be true, since</p>
+<p>\[
+exp(a + b) = e^{a + b} = e^a e^b = exp(a) * exp(b)
+\]</p>
+<p>This argument would work for any exponentiation function, not just
+with \(e\) as a base, so there is a monoid morphism of this form for
+any number \(a\), namely the function \(x \mapsto a^x\).</p>
+<p>\[
+a^0 = 1\\
+a^{b + c} = a^b * a^c
+\]</p>
+<p>We can take advantage of this identity if we’d like to calculate an
+exponential where the exponent is an even whole number.</p>
+<p>\[ a^{2n} = a^{n} * a^{n} \]</p>
+<p>Assuming we’re calculating this exponent in the naive way of
+performing \(2n\) multiplications, this rule describes an optimization
+step, resulting instead in \(n + 1\) multiplications, as we need only
+calculate \(a^n\) a single time.</p>
+<p>A similar optimization can be performed for an odd whole number,
+leading to an <a href="https://en.wikipedia.org/wiki/Exponentiation_by_squaring">algorithm using \(log_2(n)\) multiplications</a>.</p>
+<h2>Counting zeroes</h2>
+<p>In interview question I came across ask one to find the number of
+trailing zeroes in a large factorial, let’s say \(100!\), without
+calculating this actual value, as it is very large.</p>
+<p>Again, this problem can be solved through a divide &amp; conquer style
+of problem solving using monoid morphisms.</p>
+<p>There is a monoid morphism from numbers with multiplication, to the
+<a href="./2016-07-21-functional-patterns-monoid.html">pointwise lifted</a>
+monoid of numbers with addition.</p>
+<p>The fact that such a morphism exists is known as the Fundamental
+Theorem of Arithmetic, that is, we can map a number to its prime
+factorization.</p>
+<p>\[
+primes(1) = \emptyset\\
+primes(a * b) = primes(a) \cup_+ primes(b)
+\]</p>
+<p>Here \(\cup_+\) denotes pointwise addition in the set of prime
+frequencies.</p>
+<p>By applying this monoid morphism, we can find the prime factorization of
+\(100!\).</p>
+<p>\begin{aligned}
+&amp; primes(100!) \\
+= \enspace &amp; primes(100 * 99!) \\
+= \enspace &amp; primes(100) \cup_+ primes(99!) \\
+= \enspace &amp; primes(100) \cup_+ primes(99) \cup_+ \ldots \cup_+ primes(2)
+\end{aligned}</p>
+<p>From this result it is easy to find the number of zeroes in \(100!\). We
+simply take the min prime frequency for numbers 2 and 5. Since finding
+the prime factorizations up to \(100\) is quickly done, this again
+describes an optimization.</p>
+<p>One might note that we can in fact solve this problem even faster, by
+simply counting the prime frequencies for 2 and 5 <em>only</em>. In order to
+formulate this simplification in the language of monoid morphisms we
+would need to introduce equivalence classes, and their interactions
+with monoid structure, which we will not do or explain here.</p>
+<p>Instead we note that any partitioning of a set over an equvalence
+relation induces a monoid morphism to the set of partitions as long as
+the composition respects the equivalence and challenge the interested
+reader to find out more.</p>
+<h2>De Morgan’s Laws</h2>
+<p>\[
+\newcommand\andand{\kern0.8ex\texttt{&amp;&amp;}\kern0.8ex}
+\newcommand\oror{\kern0.8ex\texttt{||}\kern0.8ex}
+\]</p>
+<p>The negation function \(\texttt{!}\) which negates a boolean proposition is a monoid
+morphism from \((Bool, \texttt{&amp;&amp;}, \texttt{true})\) to \((Bool,
+\texttt{||}, \texttt{false})\).</p>
+<p>\begin{aligned}
+\texttt{!}\texttt{true} =&amp; \enspace \texttt{false}\\
+\texttt{!}(a \andand b) =&amp; \enspace !a \oror !b
+\end{aligned}</p>
+<p>It is also a monoid morphism going the other way, from \((Bool,
+\texttt{||}, \texttt{false})\) to \((Bool, \texttt{&amp;&amp;}, \texttt{true})\)</p>
+<p>\begin{aligned}
+\texttt{!}\texttt{false} =&amp; \enspace \texttt{true}\\
+\texttt{!}(a \oror b) =&amp; \enspace !a \andand !b
+\end{aligned}</p>
+<p>The fact that \(\texttt{!}\) is a monoid morphism in these ways is known
+as De Morgan’s laws.</p>
+<h2>Stable sorts</h2>
+<p>Stable sorting functions are monoid morphisms from the monoid of
+comparators to the monoid of functions with function-composition. Let \(sort_c\)
+be the sorting function that sorts by comparator \(c\).</p>
+<p>Let \(\varepsilon\) be the identity-comparator, that compares all elements
+as equal, and \(\diamond\) be
+<a href="./2016-07-21-functional-patterns-monoid.html">comparator-composition</a>. Then
+a stable sort satisfies</p>
+<p>\[
+sort_\varepsilon = id \\
+sort_{c \thinspace \diamond \thinspace d} = sort_c \circ sort_d
+\]</p>
+<p>this encodes the observation that for a stable sort we can fuse two
+sorts by different comparators \(c\) and \(d\) into a single sorting pass
+that compares first by \(c\) and then by \(d\).</p>
+<h2>The opposite monoid</h2>
+<p>A weird but interesting construction on monoids is the opposite
+monoid. It is constructed from a given monoid by taking</p>
+<p>\[
+x \otimes_{op} y = y \otimes x
+\]</p>
+<p>so this monoid is the same except the order of arguments is the
+reverse of the target monoid. The identity element stays the same.</p>
+<hr>
+<p>The function \(reverse\) is an example of a monoid morphism. It goes
+from the monoid of lists to the opposite monoid of lists — this
+means it will satisfy the monoid morphism laws</p>
+<p>\begin{equation}
+reverse(\emptyList) = \emptyList\\
+\begin{aligned}
+&amp; reverse(xs \doubleplus ys)\\
+= \enspace &amp; reverse(ys) \doubleplus reverse(xs)\\
+= \enspace &amp; reverse(xs) \doubleplusop reverse(ys)
+\end{aligned}
+\end{equation}</p>
+<p>It it helps, here’s an example with concrete values</p>
+<p>\begin{aligned}
+reverse(\texttt{[1, 2, 3, 4, 5]}) &amp; =\\
+reverse(\texttt{[1, 2, 3] ++ [4, 5]}) &amp; = \\
+reverse(\texttt{[4, 5]}) \doubleplus reverse(\texttt{[1, 2, 3]}) &amp; =\\
+reverse(\texttt{[1, 2, 3]}) \doubleplusop reverse(\texttt{[4, 5]}) &amp;= \\
+\texttt{[5, 4] ++ [3, 2, 1]}
+\end{aligned}</p>
+<h2>Word reversals</h2>
+<p>A common interview-question consists of reversing the order of words
+in a string without using any extra memory, a so-called in place
+algorithm.</p>
+<p>\[
+reverseWords(\texttt{"one two three"}) = \texttt{"three two one"}
+\]</p>
+<p>Since the function \(reverse\) is easily written as an in-place
+algorithm, it is possible to solve this problem by expressing a
+solution as some number of substring reversals on the input string.</p>
+<p>We can construct such an expression by starting with the solution and
+working backwards until the character appears in their original
+order. We’ll make use of the monoid morphism laws.</p>
+<p>\begin{aligned}
+&amp; reverseWords(\texttt{"one two three"})\\
+= \enspace &amp; \texttt{"three two one"}\\
+= \enspace &amp; reverse(reverse(\texttt{"three two one"}))\\
+= \enspace &amp; reverse(reverse(\texttt{"three" ++ " two " ++ " one"}))\\
+= \enspace &amp; reverse(reverse(\texttt{"three"}) \doubleplusop reverse(\texttt{" two "}) \doubleplusop reverse(\texttt{"one"}))\\
+= \enspace &amp; reverse(reverse(\texttt{"one"}) \doubleplus reverse(\texttt{" two "}) \doubleplus reverse(\texttt{"three"}))\\
+\end{aligned}</p>
+<p>So an in-place algorithm for word-reversal can be found by reversing
+each individual word in a string, then reversing the entire string.</p>
+<h2>String cycling</h2>
+<p>A related problem to the above is the problem of cycling strings.</p>
+<p>\[ cycle_2(\texttt{"abcdef"}) = \texttt{"cdefab"} \]</p>
+<p>that is, \(cycle_n\) will “rotate” \(n\) characters from the front of the
+string to the end.</p>
+<p>This problem too can be made into a tricky interview question by
+asking to perform it in-place, but we can conquer such difficulties
+in a similar way to the above.</p>
+<p>\begin{aligned}
+&amp; cycle_3(\texttt{"abcdefgh"})\\
+= \enspace &amp; \texttt{"defghabc"}\\
+= \enspace &amp; reverse(reverse(\texttt{"defghabc"}))\\
+= \enspace &amp; reverse(reverse(\texttt{"defgh" ++ "abc"}))\\
+= \enspace &amp; reverse(reverse(\texttt{"defgh"}) \doubleplusop reverse(\texttt{"abc"}))\\
+= \enspace &amp; reverse(reverse(\texttt{"abc"}) \doubleplus reverse(\texttt{"defgh"}))\\
+\end{aligned}</p>
+<p>and so cycling a list in place by \(n\) places can be achieved by
+reversing the first \(n\) elements, then the rest of the list, and finally
+reversing the entire list again.</p>
+</div></div><div id="footer" data-reactid="19"><a type="application/rss+xml" href="http://philipnilsson.github.io/Badness10k/atom.xml" data-reactid="20">RSS feed for this page</a><a href="https://twitter.com/ali_pang" class="twitter-follow-button" data-show-count="false" data-size="large" data-reactid="21">Follow @ali_pang</a></div><div id="disqus_thread" data-reactid="22"></div><span style="display:block;clear:both;" data-reactid="23"> </span></div></div></div><script src="/Badness10k/bundle.js?t=1498564103197"></script></body></html>

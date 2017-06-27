@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+ <html lang="en"><head><script type="text/javascript" async="" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script><script async="" src="//platform.twitter.com/widgets.js"></script><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title data-react-helmet="true">Badness 10.0000 | Escaping Hell with Monads</title><style id="typography.js">html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block}audio:not([controls]){display:none;height:0}progress{vertical-align:baseline}[hidden],template{display:none}a{background-color:transparent;-webkit-text-decoration-skip:objects}a:active,a:hover{outline-width:0}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:inherit;font-weight:bolder}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background-color:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}svg:not(:root){overflow:hidden}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}figure{margin:1em 40px}hr{box-sizing:content-box;height:0;overflow:visible}button,input,optgroup,select,textarea{font:inherit;margin:0}optgroup{font-weight:700}button,input{overflow:visible}button,select{text-transform:none}[type=reset],[type=submit],button,html [type=button]{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-cancel-button,[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-input-placeholder{color:inherit;opacity:.54}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}html{font:125%/1.65em Alegreya,serif;box-sizing:border-box;overflow-y:scroll;}*{box-sizing:inherit;}*:before{box-sizing:inherit;}*:after{box-sizing:inherit;}body{color:hsla(0,0%,0%,0.8);font-family:Alegreya,serif;font-weight:normal;word-wrap:break-word;font-kerning:normal;-moz-font-feature-settings:"kern", "liga", "clig", "calt";-ms-font-feature-settings:"kern", "liga", "clig", "calt";-webkit-font-feature-settings:"kern", "liga", "clig", "calt";font-feature-settings:"kern", "liga", "clig", "calt";}img{max-width:100%;margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}h1{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;color:inherit;font-family:Patua One,serif;font-weight:bold;text-rendering:optimizeLegibility;font-size:2.25rem;line-height:2.475rem;}h2{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;color:inherit;font-family:Patua One,serif;font-weight:bold;text-rendering:optimizeLegibility;font-size:1.62671rem;line-height:2.475rem;}h3{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;color:inherit;font-family:Patua One,serif;font-weight:bold;text-rendering:optimizeLegibility;font-size:1.38316rem;line-height:1.65rem;}h4{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;color:inherit;font-family:Patua One,serif;font-weight:bold;text-rendering:optimizeLegibility;font-size:1rem;line-height:1.65rem;}h5{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;color:inherit;font-family:Patua One,serif;font-weight:bold;text-rendering:optimizeLegibility;font-size:0.85028rem;line-height:1.65rem;}h6{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;color:inherit;font-family:Patua One,serif;font-weight:bold;text-rendering:optimizeLegibility;font-size:0.78405rem;line-height:1.65rem;}hgroup{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}ul{margin-left:1.65rem;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;list-style-position:outside;list-style-image:none;}ol{margin-left:1.65rem;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;list-style-position:outside;list-style-image:none;}dl{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}dd{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}p{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}figure{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}pre{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;font-size:0.85rem;line-height:1.42;background:hsla(0,0%,0%,0.04);border-radius:3px;overflow:auto;word-wrap:normal;padding:1.65rem;}table{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;font-size:1rem;line-height:1.65rem;border-collapse:collapse;width:100%;}fieldset{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}blockquote{margin-left:1.65rem;margin-right:1.65rem;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}form{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}noscript{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}iframe{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}hr{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:calc(1.65rem - 1px);background:hsla(0,0%,0%,0.2);border:none;height:1px;}address{margin-left:0;margin-right:0;margin-top:0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;margin-bottom:1.65rem;}b{font-weight:bold;}strong{font-weight:bold;}dt{font-weight:bold;}th{font-weight:bold;}li{margin-bottom:calc(1.65rem / 2);}ol li{padding-left:0;}ul li{padding-left:0;}li > ol{margin-left:1.65rem;margin-bottom:calc(1.65rem / 2);margin-top:calc(1.65rem / 2);}li > ul{margin-left:1.65rem;margin-bottom:calc(1.65rem / 2);margin-top:calc(1.65rem / 2);}blockquote *:last-child{margin-bottom:0;}li *:last-child{margin-bottom:0;}p *:last-child{margin-bottom:0;}li > p{margin-bottom:calc(1.65rem / 2);}code{font-size:0.85rem;line-height:1.65rem;}kbd{font-size:0.85rem;line-height:1.65rem;}samp{font-size:0.85rem;line-height:1.65rem;}abbr{border-bottom:1px dotted hsla(0,0%,0%,0.5);cursor:help;}acronym{border-bottom:1px dotted hsla(0,0%,0%,0.5);cursor:help;}abbr[title]{border-bottom:1px dotted hsla(0,0%,0%,0.5);cursor:help;text-decoration:none;}thead{text-align:left;}td,th{text-align:left;border-bottom:1px solid hsla(0,0%,0%,0.12);font-feature-settings:"tnum";-moz-font-feature-settings:"tnum";-ms-font-feature-settings:"tnum";-webkit-font-feature-settings:"tnum";padding-left:1.1rem;padding-right:1.1rem;padding-top:0.825rem;padding-bottom:calc(0.825rem - 1px);}th:first-child,td:first-child{padding-left:0;}th:last-child,td:last-child{padding-right:0;}tt,code{background-color:hsla(0,0%,0%,0.04);border-radius:3px;font-family:"SFMono-Regular", Consolas,"Roboto Mono","Droid Sans Mono","Liberation Mono",Menlo,Courier,monospace;padding:0;padding-top:0.2em;padding-bottom:0.2em;}pre code{background:none;line-height:1.42;}code:before,code:after,tt:before,tt:after{letter-spacing:-0.2em;content:" ";}pre code:before,pre code:after,pre tt:before,pre tt:after{content:"";}</style><link href="//fonts.googleapis.com/css?family=Patua+One:400|Alegreya:400,400i,700" rel="stylesheet" type="text/css"/><style>.warning{color:#9f6000;background-color:#feefb3;padding:18px}.warning:before{content:"\26A0";margin-right:9px}.rfc-page pre{font-family:inherit}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}h1,h2,h3,h4{font-weight:400}.header{text-align:center;padding:4em 0}.header h1{margin-bottom:.3em}.markdown img{max-width:400px;max-width:25rem}.headroom-wrapper h2{margin:0;padding:0;text-transform:uppercase;color:#fff}.headroom-wrapper{height:inherit!important}.figure{text-align:center}#footer{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;padding:1em 0;-webkit-box-align:center;-ms-flex-align:center;align-items:center}#footer a{font-size:80%;padding-bottom:.8em}</style></head><body><div id="react-mount"><div data-reactroot="" data-reactid="1" data-react-checksum="-928939394"><div style="margin-bottom:1.65rem;" class="headroom-wrapper" data-reactid="2"><div style="position:relative;top:0;left:0;right:0;z-index:1;-webkit-transform:translateY(0);-ms-transform:translateY(0);transform:translateY(0);background:#1244ee;" class="headroom headroom--unfixed" data-reactid="3"><div style="max-width:40rem;margin-left:auto;margin-right:auto;padding-top:0;padding:0.825rem 1.2375rem;" data-reactid="4"><a style="color:black;text-decoration:none;" href="/Badness10k/" data-reactid="5"><h2 style="float:left;" data-reactid="6">Badness 10.000</h2><a class="twitter-bird" href="//www.twitter.com/ali_pang" style="float:right;" data-reactid="7"><img src="https://g.twimg.com/dev/documentation/image/Twitter_logo_blue_48.png" style="margin:0px;filter:brightness(4);max-height:2.1rem;" data-reactid="8"/></a></a><span style="display:block;clear:both;" data-reactid="9"> </span></div></div></div><div style="max-width:40rem;margin-left:auto;margin-right:auto;padding:1.65rem 1.2375rem;padding-top:0;" data-reactid="10"><div class="markdown" data-reactid="11"><!-- react-empty: 12 --><div class="header" data-reactid="13"><h1 data-reactid="14">Escaping Hell with Monads</h1><span data-reactid="15"><!-- react-text: 16 -->Posted on <!-- /react-text --><!-- react-text: 17 -->May 8, 2017<!-- /react-text --></span></div><div data-reactid="18"><p>As programmers we occasionally find ourselves in “Programmer’s Hell”,
+where our regular abstractions fail to satisfactory solve certain
+recurrent problems.</p>
+<p>In this post we’ll have a look at some instances of such sitations,
+their “ad hoc” solutions provided at the language level, and finally
+at how these problems can be solved in a uniform way using Monads. (Call
+you language implementor and ask for <code>do</code>-notation today!)</p>
+<h1>Null-checking Hell</h1>
+<p>Null-checking Hell typically occurs when several partial functions,
+i.e. functions that may not return a real value, need to be run in
+sequence.</p>
+<p>Such functions tend lead to deeply nested and hard to read code with
+excessive syntactic clutter, obscuring our actual intentions.</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">var</span> a = getData();
+<span class="hljs-keyword">if</span> (a != <span class="hljs-literal">null</span>) {
+  <span class="hljs-keyword">var</span> b = getMoreData(a);
+  <span class="hljs-keyword">if</span> (b != <span class="hljs-literal">null</span>) {
+     <span class="hljs-keyword">var</span> c = getMoreData(b);
+     <span class="hljs-keyword">if</span> (c != <span class="hljs-literal">null</span>) {
+        <span class="hljs-keyword">var</span> d = getEvenMoreData(a, c)
+        <span class="hljs-keyword">if</span> (d != <span class="hljs-literal">null</span>) {
+          print(d);
+        }
+     }
+  }
+}
+</code></pre>
+<h2>Ad hoc solution: Elvis operators</h2>
+<p>Elvis operators introduce a specialized syntax for partial navigation,
+helping to deal with such issues.  Unfortunately this syntax is
+needlessly complected with object-oriented-style record and method
+access.</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">var</span> a = getData();
+<span class="hljs-keyword">var</span> b = a?.getMoreData();
+<span class="hljs-keyword">var</span> c = b?.getMoreData();
+<span class="hljs-keyword">var</span> d = c?.getEvenMoreData(a);
+print(d);
+</code></pre>
+<h2>Maybe Monad</h2>
+<p>By letting our simple functions explicitly return values of the
+<code>Maybe</code> (sometimes <code>Option</code>) type, we can chain together such
+functions using
+<a href="https://en.wikibooks.org/wiki/Haskell/do_notation"><code>do</code>-notation</a>,
+making use of the fact that <code>Maybe</code>/<code>Option</code> are Monadic.</p>
+<pre><code class="language-haskell"><span class="hljs-title">do</span>
+  a &lt;- getData
+  b &lt;- getMoreData a
+  c &lt;- getMoreData b
+  d &lt;- getEvenMoreData a c
+  print d
+</code></pre>
+<h1>For-loop Hell</h1>
+<p>For-loop Hell occurs when iteration through multiple dependent data
+sets is needed. Just as for null-checking, our code becomes deeply
+nested, with a lot of syntactic clutter and needless bookkeeping.</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">var</span> a = getData();
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> a_i <span class="hljs-keyword">in</span> a) {
+  <span class="hljs-keyword">var</span> b = getMoreData(a_i);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> b_j <span class="hljs-keyword">in</span> b) {
+    <span class="hljs-keyword">var</span> c = getMoreData(b_j);
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> c_k <span class="hljs-keyword">in</span> c) {
+      <span class="hljs-keyword">var</span> d = getMoreData(c_k);
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> d_l <span class="hljs-keyword">in</span> d) {
+        print(d_l);
+      }
+    }
+  }
+}
+</code></pre>
+<h2>Ad hoc solution: List comprehensions</h2>
+<p>A more elegant solution to the problem is found by introducing a
+specialized syntactic construction called list-comprehensions, sharing
+a lot of similarities with <code>SQL</code>.</p>
+<pre><code class="language-python">[
+  print(d)
+  <span class="hljs-keyword">for</span> a <span class="hljs-keyword">in</span> getData()
+  <span class="hljs-keyword">for</span> b <span class="hljs-keyword">in</span> getMoreData(a)
+  <span class="hljs-keyword">for</span> c <span class="hljs-keyword">in</span> getMoreData(b)
+  <span class="hljs-keyword">for</span> d <span class="hljs-keyword">in</span> getEvenMoreData(a, c)
+]
+</code></pre>
+<h2>List Monad</h2>
+<p>We note that lists are Monads. By reusing <code>do</code>-notation we can write
+an equally elegant solution to our problem without introducing
+additional notation.</p>
+<p>List comprehensions often include syntax for filtering, which can be
+added also to our case by using simple functions such
+as
+<a href="https://hackage.haskell.org/package/base-4.9.1.0/docs/Control-Monad.html#v:guard"><code>guard</code></a>.</p>
+<pre><code class="language-haskell"><span class="hljs-title">do</span>
+  a &lt;- getData
+  b &lt;- getMoreData a
+  c &lt;- getMoreData b
+  d &lt;- getEvenMoreData a c
+  print d
+</code></pre>
+<h1>Callback Hell</h1>
+<p>The most famous and perhaps most painful circle of coding inferno is
+Callback Hell, where the inversion of control needed to implement
+asynchronous control leads to deeply nested code and excessive
+syntactic clutter, difficult to follow error handling and a host of
+other ailments.</p>
+<pre><code class="language-javascript">getData(<span class="hljs-function"><span class="hljs-params">a</span> =&gt;</span>
+  getMoreData(a, b =&gt;
+    getMoreData(b, c =&gt;
+      getEvenMoreData(a, c, d =&gt;
+        print(d),
+        err =&gt; onErrorD(err)
+      )
+      err =&gt; onErrorC(err)
+    ),
+    err =&gt; onErrorB(err)
+  ),
+  err =&gt; onErrorA(err)
+)
+</code></pre>
+<h2>Ad hoc solution: Async/await</h2>
+<p>In order to overcome such difficulties, another kind of specialized
+syntax is introduced, called <code>async/await</code> can be introduced. Such
+notation typically delegates error handling to existing <code>try/catch</code>
+syntax, which can sometimes feel like a hell on it’s own.</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">var</span> a = <span class="hljs-keyword">await</span> getData
+  <span class="hljs-keyword">var</span> b = <span class="hljs-keyword">await</span> getMoreData(a)
+  <span class="hljs-keyword">var</span> c = <span class="hljs-keyword">await</span> getMoreData(b)
+  <span class="hljs-keyword">var</span> d = <span class="hljs-keyword">await</span> getEvenMoreData(a, c)
+  print(d)
+}
+</code></pre>
+<h2>Ad hoc solution: Promises</h2>
+<p>Another possible solution is to use Promises (also
+Futures/Tasks). While problems with nesting are alleviated, using the
+result of a Promise in multiple places forces us to manually introduce
+a lexical scope where such a value can be passed around. This leads to
+one level of nesting per variable that is used in multiple positions.</p>
+<p>Using promises directly using <code>.then</code>-syntax is also often not quite
+as clean or clear as using <code>async/await</code> notation.</p>
+<pre><code class="language-javascript">getData().then(<span class="hljs-function"><span class="hljs-params">a</span> =&gt;</span> getMoreData(a)
+  .then(<span class="hljs-function"><span class="hljs-params">b</span> =&gt;</span> getMoreData(b))
+  .then(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> getEvenMoreData(a, c))
+  .then(<span class="hljs-function"><span class="hljs-params">d</span> =&gt;</span> print(d)
+);
+</code></pre>
+<h2>Continuation Monad</h2>
+<p>At this point it shouldn’t be surprising that we can solve this
+problem in exactly the same way as the two situations previously
+encountered by noting that Promises form Monads. In this context, we
+often use the word Continuation in place of the above mentioned
+names. <a href="#fn1">[1]</a></p>
+<pre><code class="language-haskell"><span class="hljs-title">do</span>
+  a &lt;- getData
+  b &lt;- getMoreData a
+  c &lt;- getMoreData b
+  d &lt;- getEvenMoreData a c
+  print d
+</code></pre>
+<h1>State-passing Hell</h1>
+<p>The purely functional world is not without it’s problems, even
+when side-effects are not a concern. When writing certain kinds
+of purely functional code, excessive parameter passing between
+functions can become an issue.</p>
+<pre><code class="language-haskell"><span class="hljs-title">let</span>
+  (a, st1) = getData initalState
+  (b, st2) = getMoreData (a, st1)
+  (c, st3) = getMoreData (b, st2)
+  (d, st4) = getEvenMoreData (a, c, st3)
+<span class="hljs-title">in</span> print(d)
+</code></pre>
+<h2>Ad hoc solution: Imperative language</h2>
+<p>We can solve such problems by introducing implicit state that let
+functions communicate information between without having to pass all
+dependent values as explicit parameters. Unfortunately by using an
+imperative model by default severely complicates reasoning about
+code. Lifetime and size of state typically has no static bounds.</p>
+<pre><code>a = getData()<span class="hljs-comment">;</span>
+b = getMoreData(<span class="hljs-name">a</span>)<span class="hljs-comment">;</span>
+c = getMoreData(<span class="hljs-name">b</span>)<span class="hljs-comment">;</span>
+d = getEvenMoreData(<span class="hljs-name">a</span>, c)<span class="hljs-comment">;</span>
+print(<span class="hljs-name">d</span>)
+</code></pre>
+<h2>State Monad</h2>
+<pre><code class="language-haskell"><span class="hljs-title">do</span>
+  a &lt;- getData
+  b &lt;- getMoreData a
+  c &lt;- getMoreData b
+  d &lt;- getEvenMoreData a c
+  print d
+</code></pre>
+<p>The State Monad provides purely functional state without references,
+allowing for many useful higher-order operations on state, such as
+easily serializing the state or implementing functions such as
+<code>excursion</code>. <a href="https://gist.github.com/philipnilsson/f06f052fbea28a4f7e6b3cd3f8a07377"></a>,
+similar to what be accomplished in principled state management
+libraries such as Redux.</p>
+<p>The <code>ST</code> Monad provides more performant state with references, at the
+cost of some higher order behaviour.</p>
+<p>Both the State and ST monads bound the lifetime of a stateful
+computation, ensuring that programs remain easily reasoned about in
+the general case.</p>
+<h1>Conclusion</h1>
+<p>Monads can help solve certain classes of problems in a uniform
+way. We’ve had a look at this from a syntactic perspective. Rather
+than complicating language designs and grammars with additional
+features, we embed these problems in a Monadic framework, resulting in
+more economic notation, that, in addition to the problems mentioned
+above, can be adapated to additional situations.</p>
+<div id="fn1"> [1] <em><small> Javascript promises are continuations
+tracking a list of its subscribers and caching its internal async
+value, which helps embed them more predictable within an imperative
+host language. This can typically be omitted in a monadic
+setting.</small></em> </div>
+</div></div><div id="footer" data-reactid="19"><a type="application/rss+xml" href="http://philipnilsson.github.io/Badness10k/atom.xml" data-reactid="20">RSS feed for this page</a><a href="https://twitter.com/ali_pang" class="twitter-follow-button" data-show-count="false" data-size="large" data-reactid="21">Follow @ali_pang</a></div><div id="disqus_thread" data-reactid="22"></div><span style="display:block;clear:both;" data-reactid="23"> </span></div></div></div><script src="/Badness10k/bundle.js?t=1498564103197"></script></body></html>
