@@ -41,7 +41,6 @@ module.exports = React.createClass({
         window.disqus_config = function () {
             this.page.url = `https://philipnilsson.github.io/Badness10k${props.location.pathname}`;
             this.page.identifier = document.title;
-            console.log('URL!', this.page.url);
         };
         if (window.DISQUS) {
             window.DISQUS.reset({ reload: true, config: window.disqus_config });

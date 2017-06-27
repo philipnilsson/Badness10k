@@ -36,6 +36,7 @@
   "scripts": {
     "build": "gatsby build",
     "deploy": "gatsby build --prefix-links && ./backwards_compat.sh && gh-pages -d public",
+    "push": "gh-pages -d public",
     "develop": "gatsby develop",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
