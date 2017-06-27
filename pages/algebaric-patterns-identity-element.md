@@ -50,7 +50,7 @@ empty glass into another glass leaves the other glass unchanged.
 and similarly, pouring the contents of any glass into the empty glass
 
 <div class="figure">
-  <img src="/images/empty1.png" />
+  <img src="/Badness10k/images/empty1.png" />
 </div>
 
 Formally, we can write this as the following pair of equations, where
