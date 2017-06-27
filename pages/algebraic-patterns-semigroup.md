@@ -38,7 +38,7 @@ simple requirement on the method of composition. The key observation
 is that composition of puzzle pieces satisfy the following rule.
 
 <div class="figure">
-  <img src="/images/puzzle-pieces.png" />
+  <img src="/Badness10k/images/puzzle-pieces.png" />
 </div>
 
 That is, given three puzzle pieces, these can be put together in two
@@ -47,7 +47,7 @@ with the second and third. Either way the final result is required
 to be the same.
 
 <div class="figure">
-  <img src="/images/pieces-composed.png" />
+  <img src="/Badness10k/images/pieces-composed.png" />
 </div>
 
 A method of composition satisfying the above constraint is said to be

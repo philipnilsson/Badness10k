@@ -36,7 +36,7 @@ two glasses and pouring their contents into a new identical
 container.
 
 <div class="figure">
-  <img src="/images/pour.png" />
+  <img src="/Badness10k/images/pour.png" />
 </div>
 
 Equipped with this operation, we can find a property fulfilled by the
@@ -44,7 +44,7 @@ empty glass and the empty glass alone: Pouring the contents of the
 empty glass into another glass leaves the other glass unchanged.
 
 <div class="figure">
-  <img src="/images/empty2.png" />
+  <img src="/Badness10k/images/empty2.png" />
 </div>
 
 and similarly, pouring the contents of any glass into the empty glass

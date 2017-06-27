@@ -14,14 +14,14 @@ a look at the problem definition.
 Quoting the original source:
 
 > "Consider the following picture:"
-> <img src="/images/waterflow1.jpg"/>
+> <img src="/Badness10k/images/waterflow1.jpg"/>
 
 > "In this picture we have walls of different heights. This picture is
 > represented by an array of integers, where the value at each index is
 > the height of the wall. The picture above is represented with an array
 > as [2,5,1,2,3,4,7,7,6]."
 
-> <img src="/images/waterflow2.jpg"/>
+> <img src="/Badness10k/images/waterflow2.jpg"/>
 
 
 > "Now imagine it rains. How much water is going to be accumulated in
