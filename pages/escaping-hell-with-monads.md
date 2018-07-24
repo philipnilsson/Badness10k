@@ -11,7 +11,7 @@ recurrent problems.
 In this post we'll have a look at some instances of such sitations,
 their "ad hoc" solutions provided at the language level, and finally
 at how these problems can be solved in a uniform way using Monads. (Call
-you language implementor and ask for `do`-notation today!)
+your language implementor and ask for `do`-notation today!)
 
 Null-checking Hell
 ==================
@@ -20,7 +20,7 @@ Null-checking Hell typically occurs when several partial functions,
 i.e. functions that may not return a real value, need to be run in
 sequence.
 
-Such functions tend lead to deeply nested and hard to read code with
+Such functions tend to lead to deeply nested and hard to read code with
 excessive syntactic clutter, obscuring our actual intentions.
 
 ``` javascript
@@ -267,8 +267,8 @@ do
 The State Monad provides purely functional state without references,
 allowing for many useful higher-order operations on state, such as
 easily serializing the state or implementing functions such as
-`excursion`. <a href="https://gist.github.com/philipnilsson/f06f052fbea28a4f7e6b3cd3f8a07377"></a>,
-similar to what be accomplished in principled state management
+<a href="https://gist.github.com/philipnilsson/f06f052fbea28a4f7e6b3cd3f8a07377">`excursion`</a>,
+similar to what can be accomplished in principled state management
 libraries such as Redux.
 
 The `ST` Monad provides more performant state with references, at the
@@ -281,7 +281,7 @@ the general case.
 Conclusion
 ==========
 
-Monads can help solve certain classes of problems in a uniform
+Monads can help solve certain classes of problems in an uniform
 way. We've had a look at this from a syntactic perspective. Rather
 than complicating language designs and grammars with additional
 features, we embed these problems in a Monadic framework, resulting in
